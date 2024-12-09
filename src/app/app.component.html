@@ -1,0 +1,8 @@
+<app-header></app-header>
+<app-progress-bar *ngIf="loading$ | async"></app-progress-bar>
+<main class="main">
+  <div class="container">
+    <router-outlet></router-outlet>
+  </div>
+</main>
+<app-footer></app-footer>

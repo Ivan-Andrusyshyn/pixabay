@@ -1,0 +1,13 @@
+ul {
+  gap: 1rem;
+  padding: 1rem;
+  max-width: 1200px;
+  min-width: 350px;
+
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  @media screen and (min-width: 932px) {
+    justify-content: start;
+  }
+}

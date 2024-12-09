@@ -1,0 +1,14 @@
+<header class="header">
+  <nav class="nav">
+    <ul class="nav-list">
+      <li
+        class="nav-item"
+        *ngFor="let route of routes"
+        [routerLink]="route.route"
+        routerLinkActive="active"
+      >
+        {{ route.name }}
+      </li>
+    </ul>
+  </nav>
+</header>
