@@ -1,0 +1,32 @@
+.mat-dialog-container {
+  border-radius: 12px;
+  padding: 16px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  max-width: 600px;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+.dialog-content {
+  font-size: 16px;
+  line-height: 1.5;
+  color: #333;
+  margin-bottom: 16px;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0;
+}
+
+button[mat-button] {
+  font-weight: bold;
+  color: #1976d2;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: #004ba0;
+  }
+}

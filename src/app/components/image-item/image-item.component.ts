@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NgFor, NgIf } from '@angular/common';
 
 import Image from '../../common/interfaces/image.interface';
@@ -12,4 +12,9 @@ import Image from '../../common/interfaces/image.interface';
 })
 export class ImageItemComponent {
   @Input() image!: Image;
+  @Output() openDialog = new EventEmitter();
+
+  onDialog() {
+    this.openDialog.emit(this.image);
+  }
 }

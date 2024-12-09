@@ -1,5 +1,9 @@
 <ul *ngIf="images.length; else noImages">
-  <app-image-item *ngFor="let image of images" [image]="image"></app-image-item>
+  <app-image-item
+    (openDialog)="openDialog($event)"
+    *ngFor="let image of images"
+    [image]="image"
+  ></app-image-item>
 </ul>
 
 <ng-template #noImages>
