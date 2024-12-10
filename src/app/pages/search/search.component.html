@@ -1,1 +1,26 @@
-<p>search works!</p>
+<section class="search">
+  <h2 [hidden]="true">Search images</h2>
+  <div class="controller">
+    <app-search-control
+      (clearInput)="clearInput()"
+      [searchControl]="searchControl"
+    ></app-search-control>
+  </div>
+  <ng-container *ngIf="images | async as images">
+    <p *ngIf="images.length === 0">
+      No images found. Try a different search term.
+    </p>
+
+    <app-image-list [images]="images ?? []"></app-image-list>
+  </ng-container>
+  <div class="search-bg" *ngIf="(totalLength$ | async) === 0"></div>
+
+  <ng-container *ngIf="totalLength$ | async as total">
+    <div class="pagination-wrapper" *ngIf="total > 10">
+      <app-pagination
+        [totalLength]="total"
+        (onPageEvent)="handlePageEvent($event)"
+      ></app-pagination>
+    </div>
+  </ng-container>
+</section>

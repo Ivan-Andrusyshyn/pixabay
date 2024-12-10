@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { catchError, Observable } from 'rxjs';
+import { BehaviorSubject, catchError, Observable } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { MatDialogModule } from '@angular/material/dialog';
 
@@ -28,6 +28,10 @@ import Image from '../../common/interfaces/image.interface';
 })
 export class HomeComponent implements OnInit {
   images!: Observable<Image[]>;
+
+  totalLength = new BehaviorSubject(0);
+  totalLength$: Observable<number> = this.totalLength.asObservable();
+
   private readonly homeService = inject(HomeService);
 
   ngOnInit(): void {
@@ -35,6 +39,8 @@ export class HomeComponent implements OnInit {
       pageIndex: 1,
       pageSize: 10,
     });
+
+    this.totalLength$ = this.homeService.getTotalNumber();
   }
 
   handlePageEvent({ pageIndex, pageSize }: Pagination) {

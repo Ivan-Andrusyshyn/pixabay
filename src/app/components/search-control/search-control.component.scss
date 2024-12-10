@@ -1,0 +1,48 @@
+label {
+  position: relative;
+  width: 250px;
+  @media screen and (min-width: 932px) {
+    width: 350px;
+  }
+}
+.btn-clean {
+  z-index: 9999;
+
+  top: 40%;
+  right: 20px;
+  transform: translate(-50%);
+
+  color: red;
+  position: absolute;
+  cursor: pointer;
+  transition: all 0.3s;
+  &:hover {
+    font-size: 18px;
+  }
+}
+.control-wrapper {
+  position: relative;
+  width: 250px;
+  @media screen and (min-width: 932px) {
+    min-width: 350px;
+  }
+}
+.controller {
+  width: 250px;
+  transform: skew(-1deg, 1deg);
+  padding: 1rem;
+  border: 2px solid black;
+  font-size: 15px;
+  box-shadow: 3px 1px 0px 2px, 0px -1px 0px 2px rgba(0, 0, 0, 0.62);
+  letter-spacing: 2px;
+
+  box-sizing: border-box;
+  display: flex;
+  background-color: #fff;
+  color: #111;
+  font-family: "Knewave", cursive;
+  text-transform: uppercase;
+  @media screen and (min-width: 932px) {
+    width: 350px;
+  }
+}

@@ -1,9 +1,5 @@
-import { AsyncPipe } from '@angular/common';
-import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import { BehaviorSubject, Observable } from 'rxjs';
-
-import { HomeService } from '../../common/services/home.service';
 
 export interface Pagination {
   pageIndex: number;
@@ -13,17 +9,14 @@ export interface Pagination {
 @Component({
   selector: 'app-pagination',
   standalone: true,
-  imports: [MatPaginatorModule, AsyncPipe],
+  imports: [MatPaginatorModule],
   templateUrl: './pagination.component.html',
   styleUrl: './pagination.component.scss',
 })
-export class PaginationComponent implements OnInit {
+export class PaginationComponent {
   pageSize: number = 10;
   pageIndex: number = 1;
   pageSizeOptions: number[] = [10, 20];
-  totalLength = new BehaviorSubject(0);
-  totalLength$: Observable<number> = this.totalLength.asObservable();
-
   hidePageSize = false;
   showPageSizeOptions = true;
   showFirstLastButtons = true;
@@ -31,14 +24,11 @@ export class PaginationComponent implements OnInit {
   pageEvent!: PageEvent;
 
   @Output() onPageEvent = new EventEmitter<Pagination>();
-  private homeService = inject(HomeService);
+  @Input() totalLength: number = 0;
 
-  ngOnInit(): void {
-    this.totalLength$ = this.homeService.getTotalNumber();
-  }
   handlePageEvent(e: PageEvent) {
     this.pageEvent = e;
-    this.totalLength.next(e.length);
+    this.totalLength = e.length;
     this.pageSize = e.pageSize;
     if (e.pageIndex) {
       this.pageIndex = e.pageIndex;

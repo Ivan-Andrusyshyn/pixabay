@@ -19,11 +19,15 @@
 }
 
 .image-card__image {
-  width: 300px;
+  width: 340px;
   height: 200px;
 
   object-fit: cover;
   border-bottom: 2px solid #f0f0f0;
+
+  @media screen and (min-width: 932px) {
+    width: 300px;
+  }
 }
 
 .image-card__details {

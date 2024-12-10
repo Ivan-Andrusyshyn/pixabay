@@ -2,7 +2,7 @@
   #paginator
   class="demo-paginator"
   (page)="handlePageEvent($event)"
-  [length]="totalLength$ | async"
+  [length]="totalLength"
   [pageSize]="pageSize"
   [disabled]="disabled"
   [showFirstLastButtons]="showFirstLastButtons"

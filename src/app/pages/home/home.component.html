@@ -1,7 +1,12 @@
 <section class="home">
-  <app-image-list [images]="(images | async) ?? []"></app-image-list>
-  <div class="pagination-wrapper">
-    <app-pagination (onPageEvent)="handlePageEvent($event)"></app-pagination>
+  <div class="list-wrapper">
+    <app-image-list [images]="(images | async) ?? []"></app-image-list>
+    <div class="pagination-wrapper">
+      <app-pagination
+        [totalLength]="(totalLength$ | async) ?? 0"
+        (onPageEvent)="handlePageEvent($event)"
+      ></app-pagination>
+    </div>
   </div>
 </section>
 <ng-template let-data> Hello, {{ data.name }} </ng-template>
