@@ -5,7 +5,7 @@ import { BehaviorSubject, catchError, map, Observable } from 'rxjs';
 import resImages from '../interfaces/res-images.interface';
 import apiKay from '../utils/apiKey';
 import imageUrl from '../utils/image-url.enum';
-import buildImageObject from '../utils/map-image';
+import { buildImageObject } from '../utils/map-image';
 
 @Injectable({
   providedIn: 'root',
@@ -13,10 +13,13 @@ import buildImageObject from '../utils/map-image';
 export class SearchService {
   private totalLength = new BehaviorSubject<number>(0);
   constructor(private readonly http: HttpClient) {}
+
   getTotalNumber() {
     return this.totalLength.asObservable();
   }
-
+  resetTotalNumber() {
+    this.totalLength.next(0);
+  }
   searchImages(
     pageIndex: number = 1,
     perPage: number = 10,
@@ -29,7 +32,6 @@ export class SearchService {
       .pipe(
         map(({ hits, totalHits }) => {
           this.totalLength.next(totalHits);
-
           return buildImageObject(hits);
         }),
         catchError((err) => {

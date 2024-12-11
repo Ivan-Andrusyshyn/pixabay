@@ -12,9 +12,11 @@ export const routes: Routes = [
       import('./pages/search/search.component').then((c) => c.SearchComponent),
   },
   {
-    path: 'my-images',
+    path: 'gallery',
     loadComponent: () =>
-      import('./pages/my/my.component').then((c) => c.MyComponent),
+      import('./pages/gallery/gallery.component').then(
+        (c) => c.GalleryComponent
+      ),
   },
   {
     path: 'liked-images',

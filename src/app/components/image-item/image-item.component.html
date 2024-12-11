@@ -1,5 +1,10 @@
-<div class="image-card" (click)="onDialog()">
-  <img [src]="image.largeImageURL" alt="Image" class="image-card__image" />
+<div class="image-card">
+  <img
+    (click)="onDialog()"
+    [src]="image.largeImageURL"
+    alt="Image"
+    class="image-card__image"
+  />
   <div class="image-card__details">
     <h3 class="image-card__tags">
       Tags:
@@ -20,6 +25,14 @@
         <span class="stat__label">Downloads:</span>
         <span class="stat__value">{{ image.downloads }}</span>
       </div>
+      <app-add-gallery-button
+        *ngIf="isHomeRoute"
+        [image]="image"
+      ></app-add-gallery-button>
+      <app-delete-gallery-button
+        *ngIf="isGalleryRoute"
+        [imageId]="image.id"
+      ></app-delete-gallery-button>
     </div>
   </div>
 </div>

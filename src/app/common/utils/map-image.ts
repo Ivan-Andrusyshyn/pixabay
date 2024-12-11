@@ -16,4 +16,8 @@ const buildImageObject = (images: Image[]) =>
     };
   });
 
-export default buildImageObject;
+const getImagesIds = (images: Image[]): number[] => {
+  return images.map((image) => image.id);
+};
+
+export { buildImageObject, getImagesIds };

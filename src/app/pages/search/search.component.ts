@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { AsyncPipe, NgIf } from '@angular/common';
 import { BehaviorSubject, catchError, delay, map, Observable } from 'rxjs';
 
@@ -26,7 +26,7 @@ import { SearchControlComponent } from '../../components/search-control/search-c
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss',
 })
-export class SearchComponent implements OnInit {
+export class SearchComponent implements OnInit, OnDestroy {
   searchService = inject(SearchService);
 
   images: Observable<Image[]> = new BehaviorSubject<Image[]>([]).asObservable();
@@ -52,11 +52,12 @@ export class SearchComponent implements OnInit {
 
     this.totalLength$ = this.searchService.getTotalNumber();
   }
-
+  ngOnDestroy(): void {
+    this.resetSearch();
+  }
   clearInput() {
     this.searchControl.reset();
-    this.images = new BehaviorSubject<Image[]>([]).asObservable();
-    this.totalLength$ = new BehaviorSubject(0).asObservable();
+    this.resetSearch();
   }
 
   handlePageEvent({ pageIndex, pageSize }: Pagination) {
@@ -66,6 +67,10 @@ export class SearchComponent implements OnInit {
     );
   }
 
+  private resetSearch() {
+    this.searchService.resetTotalNumber();
+    this.images = new BehaviorSubject<Image[]>([]).asObservable();
+  }
   private getImagesPagination(
     { pageIndex, pageSize }: Pagination,
     value: string

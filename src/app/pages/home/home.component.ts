@@ -28,7 +28,6 @@ import Image from '../../common/interfaces/image.interface';
 })
 export class HomeComponent implements OnInit {
   images!: Observable<Image[]>;
-
   totalLength = new BehaviorSubject(0);
   totalLength$: Observable<number> = this.totalLength.asObservable();
 

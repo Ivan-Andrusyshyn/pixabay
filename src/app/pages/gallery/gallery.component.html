@@ -1,0 +1,12 @@
+<section class="gallery">
+  <div class="list-wrapper" *ngIf="(images | async)?.length; else emptyGallery">
+    <app-image-list [images]="(images | async) ?? []"></app-image-list>
+  </div>
+
+  <ng-template #emptyGallery>
+    <div class="empty-gallery">
+      🖼️
+      <button routerLink="/home" class="home-btn">+</button>
+    </div>
+  </ng-template>
+</section>

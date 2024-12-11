@@ -1,0 +1,64 @@
+.add-to-gallery-btn {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 0.5rem 1rem;
+  font-size: 16px;
+  border-radius: 30px;
+
+  display: flex;
+  align-items: center;
+  color: #fff;
+  justify-content: center;
+  font-weight: bold;
+  background: linear-gradient(45deg, #6a11cb, #2575fc);
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.add-to-gallery-btn span {
+  margin-right: 8px;
+  font-size: 16px;
+
+  display: inline-flex;
+}
+
+.add-to-gallery-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+.add-to-gallery-btn::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 200%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.2);
+  transform: skewX(-45deg);
+  transition: left 0.5s;
+}
+
+.add-to-gallery-btn:hover::after {
+  left: 100%;
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.add-to-gallery-btn:hover span {
+  animation: bounce 0.6s infinite;
+}
+button:disabled {
+  background: gray;
+  color: #f1f1f1;
+  cursor: auto;
+}

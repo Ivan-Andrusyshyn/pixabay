@@ -1,0 +1,25 @@
+.gallery {
+  padding: 2rem 1rem;
+  min-height: 60vh;
+}
+.empty-gallery {
+  font-size: 66px;
+  padding: 100px;
+  border-radius: 0.5rem;
+
+  background-color: #f1f1f1;
+  margin: auto auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.home-btn {
+  padding: 0.5rem 1rem;
+  font-size: 15px;
+  font-weight: 500;
+  border: 1px solid #bdbdbd;
+
+  color: #bdbdbd;
+  cursor: pointer;
+}

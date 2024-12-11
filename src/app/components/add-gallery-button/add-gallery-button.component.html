@@ -1,0 +1,8 @@
+<button
+  title="add to gallery"
+  class="add-to-gallery-btn"
+  (click)="addToGallery()"
+  [disabled]="existInGallery$ | async"
+>
+  <span>🖼️</span> add
+</button>
