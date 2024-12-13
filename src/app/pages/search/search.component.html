@@ -1,13 +1,17 @@
 <section class="search">
   <h2 [hidden]="true">Search images</h2>
   <div class="search-panel">
-    <div class="category-wrapper">
-      <app-category-filter
-        [title]="'category'"
-        [options]="categories"
-        (onSelect)="selectCategory($event)"
-      ></app-category-filter>
+    <div class="select-wrapper">
+      <mat-form-field>
+        <mat-label>Toppings</mat-label>
+        <mat-select [formControl]="optionsControl" multiple>
+          @for (topping of options; track topping) {
+          <mat-option [value]="topping">{{ topping }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
     </div>
+
     <div class="controller">
       <app-search-control
         (clearInput)="clearInput()"

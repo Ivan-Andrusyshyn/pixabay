@@ -4,7 +4,7 @@ import { BehaviorSubject, catchError, map, Observable } from 'rxjs';
 
 import resImages from '../interfaces/res-images.interface';
 import { buildImageObject } from '../utils/map-image';
-import { FilterService } from './filter.service';
+import requestBuilder from '../utils/request-builder';
 
 interface Search {
   pageIndex: number;
@@ -16,10 +16,7 @@ interface Search {
 })
 export class SearchService {
   private totalLength = new BehaviorSubject<number>(0);
-  constructor(
-    private readonly http: HttpClient,
-    private readonly filterService: FilterService
-  ) {}
+  constructor(private readonly http: HttpClient) {}
 
   getTotalNumber() {
     return this.totalLength.asObservable();
@@ -29,14 +26,10 @@ export class SearchService {
   }
   searchImages(
     { pageIndex = 1, pageSize = 10, value }: Search,
-    { category = '' }: { category: string }
+    options: string[]
   ): Observable<any> {
     return this.http
-      .get<resImages>(
-        this.filterService.buildRequest(pageIndex, pageSize, value, {
-          category,
-        })
-      )
+      .get<resImages>(requestBuilder(pageIndex, pageSize, value, options))
       .pipe(
         map(({ hits, totalHits }) => {
           this.totalLength.next(totalHits);

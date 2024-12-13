@@ -1,8 +1,16 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { AsyncPipe, NgIf } from '@angular/common';
-import { BehaviorSubject, catchError, delay, map, Observable } from 'rxjs';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import {
+  BehaviorSubject,
+  catchError,
+  combineLatest,
+  debounceTime,
+  Observable,
+  startWith,
+} from 'rxjs';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 import {
   Pagination,
@@ -12,19 +20,19 @@ import { ImageListComponent } from '../../components/image-list/image-list.compo
 import Image from '../../common/interfaces/image.interface';
 import { SearchService } from '../../common/services/search.service';
 import { SearchControlComponent } from '../../components/search-control/search-control.component';
-import { CategoryFilterComponent } from '../../components/category-filter/category-filter.component';
-import { Category } from '../../common/content/filter';
+import { Category, Order } from '../../common/content/filter';
 
 @Component({
   selector: 'app-search',
   standalone: true,
   imports: [
     PaginationComponent,
+    MatSelectModule,
+    MatFormFieldModule,
     ReactiveFormsModule,
     ImageListComponent,
     AsyncPipe,
     SearchControlComponent,
-    CategoryFilterComponent,
     NgIf,
   ],
   templateUrl: './search.component.html',
@@ -36,38 +44,38 @@ export class SearchComponent implements OnInit, OnDestroy {
   images: Observable<Image[]> = new BehaviorSubject<Image[]>([]).asObservable();
 
   searchControl = new FormControl('');
+  optionsControl = new FormControl('');
 
   pageIndex = 1;
   pageSize = 10;
-  categories = Category;
+  options = [...Order, ...Category];
   totalLength$!: Observable<number>;
-  currentCategory = new BehaviorSubject<string>('');
-  currentCategory$ = this.currentCategory.asObservable();
 
-  constructor() {
-    this.currentCategory$.pipe(takeUntilDestroyed()).subscribe((category) => {
-      if (this.searchControl.value?.trim()) {
-        this.images = this.getImagesPagination(
-          { pageIndex: this.pageIndex, pageSize: this.pageSize },
-          this.searchControl.value ?? ''
-        );
-      }
-    });
-  }
+  constructor() {}
+
   ngOnInit(): void {
-    this.searchControl.valueChanges.pipe(delay(1000)).subscribe((value) => {
-      if (value?.trim()) {
-        this.images = this.getImagesPagination(
-          { pageIndex: this.pageIndex, pageSize: this.pageSize },
-          value
-        );
+    combineLatest([
+      this.searchControl.valueChanges.pipe(
+        startWith(this.searchControl.value),
+        debounceTime(500)
+      ),
+      this.optionsControl.valueChanges.pipe(
+        startWith(this.optionsControl.value)
+      ),
+    ]).subscribe(([query, options]) => {
+      if (query?.trim()) {
+        this.images = this.getImagesPagination({
+          pageIndex: this.pageIndex,
+          pageSize: this.pageSize,
+        });
       } else {
-        this.images = new BehaviorSubject<Image[]>([]).asObservable();
+        this.resetSearch();
       }
     });
 
     this.totalLength$ = this.searchService.getTotalNumber();
   }
+
   ngOnDestroy(): void {
     this.resetSearch();
   }
@@ -75,33 +83,29 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.searchControl.reset();
     this.resetSearch();
   }
-  selectCategory(value: string) {
-    this.currentCategory.next(value);
-  }
+
   handlePageEvent({ pageIndex, pageSize }: Pagination) {
-    this.images = this.getImagesPagination(
-      { pageIndex, pageSize },
-      this.searchControl.value ?? ''
-    );
+    this.images = this.getImagesPagination({ pageIndex, pageSize });
   }
 
   private resetSearch() {
     this.searchService.resetTotalNumber();
     this.images = new BehaviorSubject<Image[]>([]).asObservable();
   }
-  private getImagesPagination(
-    { pageIndex, pageSize }: Pagination,
-    value: string
-  ): Observable<Image[]> {
-    return this.searchService
-      .searchImages(
-        { pageIndex, pageSize, value },
-        { category: this.currentCategory.value }
-      )
-      .pipe(
-        catchError((err) => {
-          throw err.message;
-        })
-      );
+  private getImagesPagination({
+    pageIndex,
+    pageSize,
+  }: Pagination): Observable<Image[]> {
+    const mainOptions = {
+      pageIndex,
+      pageSize,
+      value: this.searchControl.value ?? '',
+    };
+    const selectedOptions = [...(this.optionsControl.value ?? '')];
+    return this.searchService.searchImages(mainOptions, selectedOptions).pipe(
+      catchError((err) => {
+        throw err.message;
+      })
+    );
   }
 }

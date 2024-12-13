@@ -2,7 +2,7 @@
   padding: 20px;
   border-radius: 16px;
   width: 100%;
-  min-height: 60vh;
+  min-height: 600px;
 
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   display: flex;
@@ -11,6 +11,12 @@
   .search-panel {
     gap: 1rem;
     display: flex;
+  }
+  .select-wrapper {
+    gap: 1rem;
+
+    display: flex;
+    flex-wrap: wrap;
   }
   .search-bg {
     content: " ";
