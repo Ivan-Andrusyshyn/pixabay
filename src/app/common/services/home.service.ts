@@ -6,6 +6,7 @@ import apiKay from '../utils/apiKey';
 import imageUrl from '../utils/image-url.enum';
 import resImages from '../interfaces/res-images.interface';
 import { buildImageObject } from '../utils/map-image';
+import { FilterService } from './filter.service';
 
 @Injectable({
   providedIn: 'root',
@@ -13,15 +14,25 @@ import { buildImageObject } from '../utils/map-image';
 export class HomeService {
   private totalLength = new BehaviorSubject<number>(0);
 
-  constructor(private readonly http: HttpClient) {}
+  constructor(
+    private readonly http: HttpClient,
+    private readonly filterService: FilterService
+  ) {}
   getTotalNumber() {
     return this.totalLength.asObservable();
   }
 
-  getAllImages(pageIndex: number = 1, perPage: number = 10): Observable<any> {
+  getAllImages(
+    pageIndex: number = 1,
+    perPage: number = 10,
+    { order = '' }
+  ): Observable<any> {
+    const value = '';
     return this.http
       .get<resImages>(
-        `${imageUrl.base}?key=${apiKay}&page=${pageIndex}&per_page=${perPage}`
+        this.filterService.buildRequest(pageIndex, perPage, value, {
+          order,
+        })
       )
       .pipe(
         map(({ hits, totalHits }) => {

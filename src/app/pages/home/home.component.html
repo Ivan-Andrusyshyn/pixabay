@@ -1,4 +1,11 @@
 <section class="home">
+  <div class="category-wrapper">
+    <app-category-filter
+      [title]="'order'"
+      [options]="orders"
+      (onSelect)="selectOrder($event)"
+    ></app-category-filter>
+  </div>
   <div class="list-wrapper">
     <app-image-list [images]="(images | async) ?? []"></app-image-list>
     <div class="pagination-wrapper">

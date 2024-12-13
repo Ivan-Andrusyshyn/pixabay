@@ -1,10 +1,19 @@
 <section class="search">
   <h2 [hidden]="true">Search images</h2>
-  <div class="controller">
-    <app-search-control
-      (clearInput)="clearInput()"
-      [searchControl]="searchControl"
-    ></app-search-control>
+  <div class="search-panel">
+    <div class="category-wrapper">
+      <app-category-filter
+        [title]="'category'"
+        [options]="categories"
+        (onSelect)="selectCategory($event)"
+      ></app-category-filter>
+    </div>
+    <div class="controller">
+      <app-search-control
+        (clearInput)="clearInput()"
+        [searchControl]="searchControl"
+      ></app-search-control>
+    </div>
   </div>
   <ng-container *ngIf="images | async as images">
     <p *ngIf="images.length === 0">

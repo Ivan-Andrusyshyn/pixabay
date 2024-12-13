@@ -3,16 +3,23 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, map, Observable } from 'rxjs';
 
 import resImages from '../interfaces/res-images.interface';
-import apiKay from '../utils/apiKey';
-import imageUrl from '../utils/image-url.enum';
 import { buildImageObject } from '../utils/map-image';
+import { FilterService } from './filter.service';
 
+interface Search {
+  pageIndex: number;
+  pageSize: number;
+  value: string;
+}
 @Injectable({
   providedIn: 'root',
 })
 export class SearchService {
   private totalLength = new BehaviorSubject<number>(0);
-  constructor(private readonly http: HttpClient) {}
+  constructor(
+    private readonly http: HttpClient,
+    private readonly filterService: FilterService
+  ) {}
 
   getTotalNumber() {
     return this.totalLength.asObservable();
@@ -21,13 +28,14 @@ export class SearchService {
     this.totalLength.next(0);
   }
   searchImages(
-    pageIndex: number = 1,
-    perPage: number = 10,
-    value: string
+    { pageIndex = 1, pageSize = 10, value }: Search,
+    { category = '' }: { category: string }
   ): Observable<any> {
     return this.http
       .get<resImages>(
-        `${imageUrl.base}?key=${apiKay}&page=${pageIndex}&q=${value}&per_page=${perPage}`
+        this.filterService.buildRequest(pageIndex, pageSize, value, {
+          category,
+        })
       )
       .pipe(
         map(({ hits, totalHits }) => {

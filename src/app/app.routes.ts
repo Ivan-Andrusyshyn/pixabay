@@ -18,11 +18,7 @@ export const routes: Routes = [
         (c) => c.GalleryComponent
       ),
   },
-  {
-    path: 'liked-images',
-    loadComponent: () =>
-      import('./pages/liked/liked.component').then((c) => c.LikedComponent),
-  },
+
   {
     path: 'profile',
     loadComponent: () =>

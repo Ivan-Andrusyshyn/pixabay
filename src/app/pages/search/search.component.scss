@@ -8,7 +8,10 @@
   display: flex;
   flex-direction: column;
   position: relative;
-
+  .search-panel {
+    gap: 1rem;
+    display: flex;
+  }
   .search-bg {
     content: " ";
     top: 50%;
