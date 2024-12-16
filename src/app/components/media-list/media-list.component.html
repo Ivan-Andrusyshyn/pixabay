@@ -1,0 +1,9 @@
+<ul *ngIf="media.length">
+  <ng-container *ngFor="let mediaItem of media">
+    <app-image-item
+      [isImages]="(isImages | async) ?? false"
+      (openDialog)="openDialog($event)"
+      [mediaItem]="mediaItem"
+    ></app-image-item>
+  </ng-container>
+</ul>

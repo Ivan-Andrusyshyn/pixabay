@@ -11,11 +11,13 @@ import {
   Pagination,
   PaginationComponent,
 } from '../../components/pagination/pagination.component';
-import { ImageListComponent } from '../../components/image-list/image-list.component';
 import { HomeService } from '../../common/services/home.service';
-import Image from '../../common/interfaces/image.interface';
 import { Order } from '../../common/content/filter';
 import { SelectComponent } from '../../components/select/select.component';
+import { SlideToggleComponent } from '../../components/slide-toggle/slide-toggle.component';
+import { MediaListComponent } from '../../components/media-list/media-list.component';
+import { SwitchMediaService } from '../../common/services/switchmedia.service';
+import { MediaItem } from '../../common/interfaces/media.inteface';
 
 @Component({
   selector: 'app-home',
@@ -23,35 +25,38 @@ import { SelectComponent } from '../../components/select/select.component';
   imports: [
     MatButtonModule,
     MatDialogModule,
-    ImageListComponent,
+    MediaListComponent,
     PaginationComponent,
     AsyncPipe,
     SelectComponent,
+    SlideToggleComponent,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
 export class HomeComponent implements OnInit {
-  images!: Observable<Image[]>;
+  media$!: Observable<MediaItem[]>;
+
   totalLength = new BehaviorSubject(0);
   totalLength$: Observable<number> = this.totalLength.asObservable();
   orders: string[] = Order;
   orderControl = new FormControl('');
-
+  isImages = true;
   private readonly homeService = inject(HomeService);
+  private readonly mediaService = inject(SwitchMediaService);
 
   constructor() {
     this.orderControl.valueChanges
       .pipe(takeUntilDestroyed())
       .subscribe((order) => {
-        this.images = this.images = this.getImagesPagination({
+        this.media$ = this.getImagesPagination({
           pageIndex: 1,
           pageSize: 10,
         });
       });
   }
   ngOnInit(): void {
-    this.images = this.images = this.getImagesPagination({
+    this.media$ = this.getImagesPagination({
       pageIndex: 1,
       pageSize: 10,
     });
@@ -60,12 +65,19 @@ export class HomeComponent implements OnInit {
   }
 
   handlePageEvent({ pageIndex, pageSize }: Pagination) {
-    this.images = this.getImagesPagination({ pageIndex, pageSize });
+    this.media$ = this.getImagesPagination({ pageIndex, pageSize });
+  }
+
+  onToggle(isToggle: boolean) {
+    this.isImages = isToggle;
+    this.mediaService.toggleMedia(isToggle);
   }
 
   private getImagesPagination({ pageIndex, pageSize }: Pagination) {
     return this.homeService
-      .getAllImages(pageIndex, pageSize, [this.orderControl.value ?? ''])
+      .getAllImages(this.isImages, pageIndex, pageSize, [
+        this.orderControl.value ?? '',
+      ])
       .pipe(
         catchError((err) => {
           throw err.message;

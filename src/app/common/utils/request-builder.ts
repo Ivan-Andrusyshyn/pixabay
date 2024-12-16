@@ -3,16 +3,20 @@ import apiKay from './apiKey';
 import imageUrl from './image-url.enum';
 
 const requestBuilder = (
+  isImages: boolean,
   pageIndex: number,
   perPage: number,
   value: string = '',
   options: string[]
 ) => {
-  let url = `${imageUrl.base}?key=${apiKay}&page=${pageIndex}&per_page=${perPage}`;
-
+  const pagination = `?key=${apiKay}&page=${pageIndex}&per_page=${perPage}`;
+  let url = '';
+  if (isImages) {
+    url = imageUrl.base + pagination;
+  } else {
+    url = `${imageUrl.base}/videos` + pagination;
+  }
   for (let i = 0; i < options.length; i++) {
-    console.log(i);
-
     if (Category.includes(options[i])) {
       url += `&category=${options[i]}`;
     }

@@ -1,6 +1,6 @@
 <section class="gallery">
-  <div class="list-wrapper" *ngIf="(images | async)?.length; else emptyGallery">
-    <app-image-list [images]="(images | async) ?? []"></app-image-list>
+  <div class="list-wrapper" *ngIf="(media | async)?.length; else emptyGallery">
+    <app-media-list [media]="(media | async) ?? []"></app-media-list>
   </div>
 
   <ng-template #emptyGallery>

@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import Image from '../interfaces/image.interface';
+
+import { MediaItem } from '../interfaces/media.inteface';
 
 @Injectable({
   providedIn: 'root',
@@ -9,10 +10,10 @@ import Image from '../interfaces/image.interface';
 export class GalleryService {
   constructor(private readonly http: HttpClient) {}
 
-  private gallery = new BehaviorSubject<Image[]>([]);
+  private gallery = new BehaviorSubject<MediaItem[]>([]);
   imagesIds: number[] = [];
 
-  addImage(image: Image) {
+  addImage(image: MediaItem) {
     this.gallery.next([...this.gallery.value, image]);
   }
 

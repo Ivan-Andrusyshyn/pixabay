@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, catchError, map, Observable } from 'rxjs';
 
 import resImages from '../interfaces/res-images.interface';
-import { buildImageObject } from '../utils/map-image';
+import { buildMediaObject } from '../utils/map-media';
 import requestBuilder from '../utils/request-builder';
 
 @Injectable({
@@ -11,25 +11,27 @@ import requestBuilder from '../utils/request-builder';
 })
 export class HomeService {
   private totalLength = new BehaviorSubject<number>(0);
-
   constructor(private readonly http: HttpClient) {}
   getTotalNumber() {
     return this.totalLength.asObservable();
   }
 
   getAllImages(
+    isImages = true,
     pageIndex: number = 1,
     perPage: number = 10,
     options: string[]
   ): Observable<any> {
     const value = '';
     return this.http
-      .get<resImages>(requestBuilder(pageIndex, perPage, value, options))
+      .get<resImages>(
+        requestBuilder(isImages, pageIndex, perPage, value, options)
+      )
       .pipe(
         map(({ hits, totalHits }) => {
           this.totalLength.next(totalHits);
 
-          return buildImageObject(hits);
+          return buildMediaObject(isImages, hits);
         }),
         catchError((err) => {
           throw err.message;

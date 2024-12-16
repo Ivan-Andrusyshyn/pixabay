@@ -1,6 +1,10 @@
 <section class="search">
   <h2 [hidden]="true">Search images</h2>
   <div class="search-panel">
+    <app-slide-toggle
+      (onToggle)="onToggle($event)"
+      [toggleTitle]="isImages ? 'images' : 'videos'"
+    ></app-slide-toggle>
     <div class="select-wrapper">
       <mat-form-field>
         <mat-label>Toppings</mat-label>
@@ -24,7 +28,7 @@
       No images found. Try a different search term.
     </p>
 
-    <app-image-list [images]="images ?? []"></app-image-list>
+    <app-media-list [media]="images ?? []"></app-media-list>
   </ng-container>
   <div class="search-bg" *ngIf="(totalLength$ | async) === 0"></div>
 

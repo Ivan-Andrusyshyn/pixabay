@@ -1,5 +1,9 @@
 <section class="home">
   <div class="category-wrapper">
+    <app-slide-toggle
+      (onToggle)="onToggle($event)"
+      [toggleTitle]="isImages ? 'images' : 'videos'"
+    ></app-slide-toggle>
     <app-select
       [title]="'order'"
       [options]="orders"
@@ -7,7 +11,7 @@
     ></app-select>
   </div>
   <div class="list-wrapper">
-    <app-image-list [images]="(images | async) ?? []"></app-image-list>
+    <app-media-list [media]="(media$ | async) ?? []"></app-media-list>
     <div class="pagination-wrapper">
       <app-pagination
         [totalLength]="(totalLength$ | async) ?? 0"

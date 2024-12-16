@@ -1,37 +1,53 @@
 <div class="image-card">
   <img
+    *ngIf="isImage(mediaItem)"
     (click)="onDialog()"
-    [src]="image.largeImageURL"
+    [src]="mediaItem.largeImageURL"
     alt="Image"
     class="image-card__image"
   />
+  <div class="video_wrapper" *ngIf="isVideo(mediaItem)">
+    <span (click)="onDialog()">Full Screen</span>
+
+    <video
+      [attr.width]="mediaItem.video?.width"
+      [attr.height]="mediaItem.video?.height"
+      controls
+      class="image-card__video"
+      [src]="mediaItem.video?.url"
+    >
+      <source [src]="mediaItem.video?.url" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+  </div>
+
   <div class="image-card__details">
     <h3 class="image-card__tags">
       Tags:
-      <span *ngFor="let tag of image.tags" class="image-card__tag">{{
+      <span *ngFor="let tag of mediaItem.tags" class="image-card__tag">{{
         tag
       }}</span>
     </h3>
     <div class="image-card__stats">
       <div class="stat">
         <span class="stat__label">Likes:</span>
-        <span class="stat__value">{{ image.likes }}</span>
+        <span class="stat__value">{{ mediaItem.likes }}</span>
       </div>
       <div class="stat">
         <span class="stat__label">Comments:</span>
-        <span class="stat__value">{{ image.comments }}</span>
+        <span class="stat__value">{{ mediaItem.comments }}</span>
       </div>
       <div class="stat">
         <span class="stat__label">Downloads:</span>
-        <span class="stat__value">{{ image.downloads }}</span>
+        <span class="stat__value">{{ mediaItem.downloads }}</span>
       </div>
       <app-add-gallery-button
         *ngIf="isHomeRoute"
-        [image]="image"
+        [image]="mediaItem"
       ></app-add-gallery-button>
       <app-delete-gallery-button
         *ngIf="isGalleryRoute"
-        [imageId]="image.id"
+        [imageId]="mediaItem.id"
       ></app-delete-gallery-button>
     </div>
   </div>

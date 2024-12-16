@@ -3,8 +3,8 @@ import { AsyncPipe } from '@angular/common';
 import { BehaviorSubject } from 'rxjs';
 
 import { GalleryService } from '../../common/services/gallery.service';
-import Image from '../../common/interfaces/image.interface';
-import { getImagesIds } from '../../common/utils/map-image';
+import { getImagesIds } from '../../common/utils/map-media';
+import { MediaItem } from '../../common/interfaces/media.inteface';
 
 @Component({
   selector: 'app-add-gallery-button',
@@ -14,7 +14,7 @@ import { getImagesIds } from '../../common/utils/map-image';
   styleUrl: './add-gallery-button.component.scss',
 })
 export class AddGalleryButtonComponent implements OnInit {
-  @Input() image!: Image;
+  @Input() image!: MediaItem;
 
   private galleryService = inject(GalleryService);
   private existInGallery = new BehaviorSubject<boolean>(false);

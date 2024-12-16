@@ -3,10 +3,11 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, map, Observable } from 'rxjs';
 
 import resImages from '../interfaces/res-images.interface';
-import { buildImageObject } from '../utils/map-image';
+import { buildMediaObject } from '../utils/map-media';
 import requestBuilder from '../utils/request-builder';
 
 interface Search {
+  isImages: boolean;
   pageIndex: number;
   pageSize: number;
   value: string;
@@ -25,15 +26,17 @@ export class SearchService {
     this.totalLength.next(0);
   }
   searchImages(
-    { pageIndex = 1, pageSize = 10, value }: Search,
+    { isImages, pageIndex = 1, pageSize = 10, value }: Search,
     options: string[]
   ): Observable<any> {
     return this.http
-      .get<resImages>(requestBuilder(pageIndex, pageSize, value, options))
+      .get<resImages>(
+        requestBuilder(isImages, pageIndex, pageSize, value, options)
+      )
       .pipe(
         map(({ hits, totalHits }) => {
           this.totalLength.next(totalHits);
-          return buildImageObject(hits);
+          return buildMediaObject(isImages, hits);
         }),
         catchError((err) => {
           throw err.message;

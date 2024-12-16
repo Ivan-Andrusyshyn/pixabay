@@ -3,6 +3,7 @@
 }
 .pagination-wrapper {
   padding: 1rem 0;
+
   display: flex;
   justify-content: center;
 }
@@ -11,4 +12,10 @@
 }
 .category-wrapper {
   padding: 0.5rem;
+  gap: 1rem;
+  max-width: 500px;
+
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
 }
