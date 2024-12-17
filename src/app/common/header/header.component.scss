@@ -15,14 +15,33 @@ $hover-color: #66bb6a;
     display: flex;
     justify-content: space-between;
     align-items: center;
-
-    .nav-list {
+    ul {
       list-style: none;
       margin: 0;
       padding: 0;
       display: flex;
       gap: 20px;
+    }
+    .auth-nav-list {
+      .auth-nav-item {
+        font-size: 1rem;
+        font-weight: 300;
+        color: $text-color;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: color 0.3s ease, transform 0.2s ease;
 
+        &:hover {
+          color: $primary-color;
+        }
+
+        &.active {
+          color: $secondary-color;
+          border-bottom: 2px solid $secondary-color;
+        }
+      }
+    }
+    .nav-list {
       .nav-item {
         font-size: 1.1rem;
         font-weight: 500;

@@ -2,7 +2,7 @@ import { AsyncPipe, NgFor, NgIf } from '@angular/common';
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
-import { ImageItemComponent } from '../image-item/image-item.component';
+import { MediaItemComponent } from '../image-item/image-item.component';
 import { ImageDetailsComponent } from '../image-details/image-details.component';
 import { SwitchMediaService } from '../../common/services/switchmedia.service';
 import { Observable } from 'rxjs';
@@ -11,7 +11,7 @@ import { MediaItem } from '../../common/interfaces/media.inteface';
 @Component({
   selector: 'app-media-list',
   standalone: true,
-  imports: [NgFor, NgIf, AsyncPipe, ImageItemComponent],
+  imports: [NgFor, NgIf, AsyncPipe, MediaItemComponent],
   templateUrl: './media-list.component.html',
   styleUrl: './media-list.component.scss',
 })

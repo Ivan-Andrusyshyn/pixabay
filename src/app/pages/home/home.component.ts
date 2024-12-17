@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { BehaviorSubject, catchError, Observable } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -42,20 +42,21 @@ export class HomeComponent implements OnInit {
   orders: string[] = Order;
   orderControl = new FormControl('');
   isImages = true;
+  destroyRef = inject(DestroyRef);
+  pageIndex: number = 1;
+  pageSize: number = 10;
   private readonly homeService = inject(HomeService);
   private readonly mediaService = inject(SwitchMediaService);
 
-  constructor() {
+  ngOnInit(): void {
     this.orderControl.valueChanges
-      .pipe(takeUntilDestroyed())
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((order) => {
         this.media$ = this.getImagesPagination({
           pageIndex: 1,
           pageSize: 10,
         });
       });
-  }
-  ngOnInit(): void {
     this.media$ = this.getImagesPagination({
       pageIndex: 1,
       pageSize: 10,
@@ -65,12 +66,18 @@ export class HomeComponent implements OnInit {
   }
 
   handlePageEvent({ pageIndex, pageSize }: Pagination) {
+    this.pageIndex = pageIndex;
+    this.pageSize = pageSize;
     this.media$ = this.getImagesPagination({ pageIndex, pageSize });
   }
 
   onToggle(isToggle: boolean) {
     this.isImages = isToggle;
     this.mediaService.toggleMedia(isToggle);
+    this.media$ = this.getImagesPagination({
+      pageIndex: this.pageIndex,
+      pageSize: this.pageSize,
+    });
   }
 
   private getImagesPagination({ pageIndex, pageSize }: Pagination) {

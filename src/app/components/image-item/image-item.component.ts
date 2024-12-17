@@ -10,7 +10,7 @@ import { NgFor, NgIf } from '@angular/common';
 
 import { AddGalleryButtonComponent } from '../add-gallery-button/add-gallery-button.component';
 import { ActivatedRoute } from '@angular/router';
-import { ImageItemService } from './image-item.service';
+import { ImageItemService } from './media-item.service';
 import { DeleteGalleryButtonComponent } from '../delete-gallery-button/delete-gallery-button.component';
 import {
   Image,
@@ -19,7 +19,7 @@ import {
 } from '../../common/interfaces/media.inteface';
 
 @Component({
-  selector: 'app-image-item',
+  selector: 'app-media-item',
   standalone: true,
   imports: [
     NgFor,
@@ -27,10 +27,10 @@ import {
     DeleteGalleryButtonComponent,
     AddGalleryButtonComponent,
   ],
-  templateUrl: './image-item.component.html',
-  styleUrl: './image-item.component.scss',
+  templateUrl: './media-item.component.html',
+  styleUrl: './media-item.scss',
 })
-export class ImageItemComponent implements OnInit {
+export class MediaItemComponent implements OnInit {
   @Input() mediaItem!: MediaItem;
   @Input() isImages!: boolean;
   @Output() openDialog = new EventEmitter();
@@ -42,8 +42,6 @@ export class ImageItemComponent implements OnInit {
   isGalleryRoute: boolean = false;
 
   ngOnInit(): void {
-    console.log(this.mediaItem);
-
     this.route.url.subscribe((urlSegments) => {
       const { home, gallery } =
         this.imageItemService.getCurrentUrl(urlSegments);

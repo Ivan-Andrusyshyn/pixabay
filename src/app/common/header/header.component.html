@@ -10,5 +10,22 @@
         {{ route.name }}
       </li>
     </ul>
+    <ul class="auth-nav-list" *ngIf="!isAuth">
+      <li
+        routerLink="auth/login"
+        routerLinkActive="active"
+        class="auth-nav-item"
+      >
+        login
+      </li>
+      /
+      <li
+        routerLink="auth/signup"
+        routerLinkActive="active"
+        class="auth-nav-item"
+      >
+        sign up
+      </li>
+    </ul>
   </nav>
 </header>

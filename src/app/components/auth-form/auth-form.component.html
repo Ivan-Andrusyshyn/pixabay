@@ -1,0 +1,67 @@
+<div class="example-container" [formGroup]="authForm">
+  <mat-form-field appearance="outline" hintLabel="Max 18 characters">
+    <mat-label>Enter Name</mat-label>
+    <input
+      matInput
+      placeholder="Name"
+      maxlength="18"
+      minlength="4"
+      formControlName="name"
+      aria-label="Enter Name"
+    />
+    <mat-hint align="end"
+      >{{ authForm.get("name")?.value?.length || 0 }}/18</mat-hint
+    >
+    <mat-error
+      *ngIf="authForm.get('name')?.invalid && authForm.get('name')?.touched"
+    >
+      Name is required (Max 18 characters)
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" *ngIf="!isLoginPage">
+    <mat-label>Enter Email</mat-label>
+    <input
+      matInput
+      placeholder="Email"
+      type="email"
+      formControlName="email"
+      aria-label="Enter Email"
+    />
+    <mat-error
+      *ngIf="authForm.get('email')?.invalid && authForm.get('email')?.touched"
+    >
+      Please enter a valid email address
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" hintLabel="Max 10 characters">
+    <mat-label>Enter Password</mat-label>
+    <input
+      matInput
+      placeholder="Password"
+      type="password"
+      maxlength="16"
+      minlength="8"
+      formControlName="password"
+      aria-label="Enter Password"
+    />
+    <mat-hint align="end"
+      >{{ authForm.get("password")?.value?.length || 0 }}/16</mat-hint
+    >
+    <mat-error
+      *ngIf="
+        authForm.get('password')?.invalid && authForm.get('password')?.touched
+      "
+    >
+      Password is required (Max 10 characters)
+    </mat-error>
+  </mat-form-field>
+
+  <app-select
+    *ngIf="!isLoginPage"
+    [title]="'interests'"
+    [controller]="interestControl"
+    [options]="options"
+  ></app-select>
+</div>

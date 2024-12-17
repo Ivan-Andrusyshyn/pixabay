@@ -12,4 +12,5 @@ import routeList from './route-list';
 })
 export class HeaderComponent {
   routes: { name: string; route: string }[] = routeList;
+  isAuth = false;
 }
