@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 @Injectable({
   providedIn: 'root',
 })
-export class ImageItemService {
+export class MediaItemService {
   private isHomeRoute: boolean = false;
   private isGalleryRoute: boolean = false;
   constructor() {}

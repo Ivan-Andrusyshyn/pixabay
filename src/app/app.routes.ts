@@ -1,6 +1,12 @@
 import { Routes } from '@angular/router';
+import { authGuard } from './common/guards/auth.guard';
 
 export const routes: Routes = [
+  {
+    path: '',
+    redirectTo: 'home',
+    pathMatch: 'full',
+  },
   {
     path: 'home',
     loadComponent: () =>
@@ -17,6 +23,7 @@ export const routes: Routes = [
       import('./pages/gallery/gallery.component').then(
         (c) => c.GalleryComponent
       ),
+    canActivate: [authGuard],
   },
 
   {
@@ -25,6 +32,7 @@ export const routes: Routes = [
       import('./pages/profile/profile.component').then(
         (c) => c.ProfileComponent
       ),
+    canActivate: [authGuard],
   },
   {
     path: 'auth',

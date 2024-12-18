@@ -12,7 +12,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class SignUpComponent {
   private fb = inject(FormBuilder);
   authForm!: FormGroup;
-
+  title: string = 'Sign up';
   ngOnInit(): void {
     this.authForm = this.fb.group({
       name: ['', Validators.required],

@@ -42,11 +42,11 @@
         <span class="stat__value">{{ mediaItem.downloads }}</span>
       </div>
       <app-add-gallery-button
-        *ngIf="isHomeRoute"
+        *ngIf="isHomeRoute && (isAuth$ | async)"
         [image]="mediaItem"
       ></app-add-gallery-button>
       <app-delete-gallery-button
-        *ngIf="isGalleryRoute"
+        *ngIf="isGalleryRoute && (isAuth$ | async)"
         [imageId]="mediaItem.id"
       ></app-delete-gallery-button>
     </div>

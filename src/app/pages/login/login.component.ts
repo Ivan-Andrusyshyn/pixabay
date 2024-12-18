@@ -14,6 +14,7 @@ import { catchError } from 'rxjs';
 export class LoginComponent implements OnInit {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
+  title: string = 'Sign in';
 
   authForm!: FormGroup;
   ngOnInit(): void {
