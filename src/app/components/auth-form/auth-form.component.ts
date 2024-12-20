@@ -34,9 +34,11 @@ export class AuthFormComponent {
   private destroyRef = inject(DestroyRef);
 
   @Input() authForm!: FormGroup;
+  @Output() submit = new EventEmitter();
   options = Category;
   interestControl!: FormControl;
   isLoginPage: boolean = false;
+  isMultiSelector: boolean = true;
   activatedRoute = inject(ActivatedRoute);
 
   ngOnInit() {
@@ -48,5 +50,9 @@ export class AuthFormComponent {
     if (!this.isLoginPage) {
       this.interestControl = this.authForm.get('interest') as FormControl;
     }
+  }
+
+  onSubmit() {
+    this.submit.emit();
   }
 }

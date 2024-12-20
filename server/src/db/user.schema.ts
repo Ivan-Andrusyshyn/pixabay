@@ -5,20 +5,15 @@ export interface IUser extends Document {
   name: string;
   email: string;
   password: string;
-  media: string;
+  interest: string[];
   comparePassword(candidatePassword: string): Promise<boolean>;
-}
-
-interface IUserModel extends Model<IUser> {
-  email: IUserModel | null;
-  id: any;
 }
 
 const UserSchema: Schema<IUser> = new Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  media: { type: String, required: true },
+  interest: { type: [String], required: true },
 });
 
 UserSchema.pre<IUser>('save', async function (next) {
@@ -39,6 +34,6 @@ UserSchema.methods.comparePassword = function (
   return bcrypt.compare(candidatePassword, this.password);
 };
 
-const User = mongoose.model<IUser, IUserModel>('pixabay-user', UserSchema);
+const User = mongoose.model<IUser>('pixabay-user', UserSchema);
 
 export default User;

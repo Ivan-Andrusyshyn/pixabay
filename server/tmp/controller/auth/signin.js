@@ -16,16 +16,16 @@ const httpError_1 = __importDefault(require("../../utils/httpError"));
 const signIn = (request, response, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const customRequest = request;
-        if (!customRequest.token) {
-            throw new httpError_1.default("Authentication token is missing", 401);
-        }
+        const user = customRequest.user;
+        const token = customRequest.token;
         response.status(200).json({
-            message: "Success!",
-            access_token: customRequest.token,
+            message: 'Success!',
+            access_token: token,
+            user,
         });
     }
     catch (error) {
-        next(new httpError_1.default("Failed login", 500));
+        next(new httpError_1.default('Failed login', 500));
     }
 });
 exports.default = signIn;

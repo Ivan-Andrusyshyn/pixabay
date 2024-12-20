@@ -12,16 +12,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const httpError_1 = __importDefault(require("../../utils/httpError"));
+const user_1 = __importDefault(require("../../services/user"));
 const signUp = (request, response) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const customRequest = request;
-        if (!customRequest.token) {
-            throw new httpError_1.default('Authentication token is missing', 401);
-        }
+        const { name, email, password, interest } = request.body;
+        const token = jsonwebtoken_1.default.sign({ name, email, interest }, process.env.JWT_KEY, {
+            expiresIn: '45m',
+        });
+        const createdUser = yield user_1.default.createUser({
+            name,
+            email,
+            password,
+            interest,
+        });
+        console.log(createdUser);
         response.status(200).json({
             message: 'Success!',
-            access_token: customRequest.token,
+            access_token: token,
+            user: { name, email, interest },
         });
     }
     catch (error) {

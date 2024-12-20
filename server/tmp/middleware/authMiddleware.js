@@ -27,7 +27,7 @@ const authMiddleware = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
         const token = authHeader === null || authHeader === void 0 ? void 0 : authHeader.replace('Bearer ', '');
         console.log(token);
         const decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_KEY);
-        if (!decoded || !decoded.name || !decoded.id || !decoded.email) {
+        if (!decoded || !decoded.id || !decoded.email) {
             res.status(401).json({ message: 'Invalid token payload' });
         }
         req.user = decoded;

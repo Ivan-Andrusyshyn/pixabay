@@ -1,5 +1,9 @@
-<div class="example-container" [formGroup]="authForm">
-  <mat-form-field appearance="outline" hintLabel="Max 18 characters">
+<form class="example-container" (ngSubmit)="onSubmit()" [formGroup]="authForm">
+  <mat-form-field
+    appearance="outline"
+    *ngIf="!isLoginPage"
+    hintLabel="Max 18 characters"
+  >
     <mat-label>Enter Name</mat-label>
     <input
       matInput
@@ -19,7 +23,7 @@
     </mat-error>
   </mat-form-field>
 
-  <mat-form-field appearance="outline" *ngIf="!isLoginPage">
+  <mat-form-field appearance="outline">
     <mat-label>Enter Email</mat-label>
     <input
       matInput
@@ -63,5 +67,10 @@
     [title]="'interests'"
     [controller]="interestControl"
     [options]="options"
+    [isMultiSelector]="isMultiSelector"
   ></app-select>
-</div>
+
+  <button class="form-btn" type="submit">
+    {{ isLoginPage ? "login" : "sign up" }}
+  </button>
+</form>

@@ -23,6 +23,7 @@ import { Category, Order } from '../../common/content/filter';
 import { MediaItem } from '../../common/interfaces/media.inteface';
 import { SwitchMediaService } from '../../common/services/switchmedia.service';
 import { SlideToggleComponent } from '../../components/slide-toggle/slide-toggle.component';
+import { SelectComponent } from '../../components/select/select.component';
 
 @Component({
   selector: 'app-search',
@@ -36,6 +37,7 @@ import { SlideToggleComponent } from '../../components/slide-toggle/slide-toggle
     AsyncPipe,
     SearchControlComponent,
     SlideToggleComponent,
+    SelectComponent,
     NgIf,
   ],
   templateUrl: './search.component.html',
@@ -52,6 +54,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   searchControl = new FormControl('');
   optionsControl = new FormControl('');
 
+  isMultiSelector: boolean = true;
   pageIndex = 1;
   pageSize = 10;
   options = [...Order, ...Category];

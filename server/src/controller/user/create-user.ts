@@ -1,19 +1,23 @@
-import { Request, Response } from "express";
+import { Request, Response } from 'express';
 
-import userService from "../../services/user";
-import User from "./user.interface";
-import HttpError from "../../utils/httpError";
+import userService from '../../services/user';
+import HttpError from '../../utils/httpError';
 
 const createUser = async (request: Request, response: Response) => {
-  const { name, email } = request.body;
+  const { name, email, password, interest } = request.body;
   try {
-    const createdUser = await userService.createUser(name, email);
+    const createdUser = await userService.createUser({
+      name,
+      email,
+      password,
+      interest,
+    });
     response.status(201).json({
-      message: "Success!",
+      message: 'Success!',
       createdUser,
     });
   } catch (error) {
-    throw new HttpError("Failed to create user", 500);
+    throw new HttpError('Failed to create user', 500);
   }
 };
 

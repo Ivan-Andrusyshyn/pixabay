@@ -1,7 +1,7 @@
-interface User {
+interface LoginUser {
   id?: number;
-  name: string;
   email: string;
+  password: string;
 }
 
-export default User;
+export { LoginUser };

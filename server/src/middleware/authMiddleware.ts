@@ -1,13 +1,12 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import dotenv from 'dotenv';
-
-import User from '../controller/user/user.interface';
+import { LoginUser } from '../controller/user/user.interface';
 
 dotenv.config();
 
 export interface CustomRequest extends Request {
-  user: User | JwtPayload;
+  user: LoginUser | JwtPayload;
   token: string;
 }
 
@@ -27,8 +26,11 @@ export const authMiddleware = async (
     const token = authHeader?.replace('Bearer ', '') as string;
     console.log(token);
 
-    const decoded = jwt.verify(token, process.env.JWT_KEY as string) as User;
-    if (!decoded || !decoded.name || !decoded.id || !decoded.email) {
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_KEY as string
+    ) as LoginUser;
+    if (!decoded || !decoded.id || !decoded.email) {
       res.status(401).json({ message: 'Invalid token payload' });
     }
     (req as CustomRequest).user = decoded;

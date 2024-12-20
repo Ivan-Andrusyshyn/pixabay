@@ -3,8 +3,8 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 
 import userService from '../services/user';
-import User from '../controller/user/user.interface';
 import { CustomRequest } from './authMiddleware';
+import HttpError from '../utils/httpError';
 
 dotenv.config();
 
@@ -12,30 +12,55 @@ const jwtMiddleware = async (
   req: Request,
   res: Response,
   next: NextFunction
-) => {
-  const { name, email }: User = req.body;
+): Promise<any> => {
   const request = req as CustomRequest;
 
   try {
-    const result = await userService.getUserByEmail(email);
+    const userEmail = req.body.email;
 
-    if (result && result.email && result.name && result.id) {
-      const id = result.id;
-
-      const token = jwt.sign(
-        { name, email, id },
-        process.env.JWT_KEY as string,
-        {
-          expiresIn: '45m',
-        }
-      );
-      request.token = token;
-      request.user = result;
+    if (!userEmail) {
+      throw new HttpError('Email is required', 400);
     }
-  } catch (error) {
-    res.status(403).json({ message: 'User is not exist!' });
-  } finally {
+
+    const result = await userService.getUserByEmail(userEmail);
+
+    if (!result) {
+      throw new HttpError('User does not exist', 401);
+    }
+    const { _id, name, email, interest } = result;
+
+    if (!_id || !name || !email) {
+      throw new HttpError('Invalid user data', 500);
+    }
+
+    const userData = {
+      id: _id.toString(),
+      name,
+      email,
+      interest,
+    };
+
+    const jwtKey = process.env.JWT_KEY;
+    if (!jwtKey) {
+      throw new HttpError('JWT key is not configured', 500);
+    }
+
+    const token = jwt.sign(userData, jwtKey, {
+      expiresIn: '45m',
+    });
+
+    request.token = token;
+    request.user = userData;
+
     next();
+  } catch (error) {
+    console.error('Middleware error:', error);
+
+    if (error instanceof HttpError) {
+      return res.status(error.statusCode).json({ message: error.message }); // Добавлен return
+    }
+
+    return res.status(500).json({ message: 'Internal server error' }); // Добавлен return
   }
 };
 

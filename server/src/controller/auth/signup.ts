@@ -1,18 +1,32 @@
 import { Request, Response } from 'express';
+import jwt from 'jsonwebtoken';
 
 import HttpError from '../../utils/httpError';
-import { CustomRequest } from '../../middleware/authMiddleware';
+import userService from '../../services/user';
 
 const signUp = async (request: Request, response: Response) => {
   try {
-    const customRequest = request as CustomRequest;
-    if (!customRequest.token) {
-      throw new HttpError('Authentication token is missing', 401);
-    }
+    const { name, email, password, interest } = request.body;
+
+    const token = jwt.sign(
+      { name, email, interest },
+      process.env.JWT_KEY as string,
+      {
+        expiresIn: '45m',
+      }
+    );
+    const createdUser = await userService.createUser({
+      name,
+      email,
+      password,
+      interest,
+    });
+    console.log(createdUser);
 
     response.status(200).json({
       message: 'Success!',
-      access_token: customRequest.token,
+      access_token: token,
+      user: { name, email, interest },
     });
   } catch (error) {
     throw new HttpError('Failed to create user', 500);

@@ -15,16 +15,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const user_1 = __importDefault(require("../../services/user"));
 const httpError_1 = __importDefault(require("../../utils/httpError"));
 const createUser = (request, response) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name, email } = request.body;
+    const { name, email, password, interest } = request.body;
     try {
-        const createdUser = yield user_1.default.createUser(name, email);
+        const createdUser = yield user_1.default.createUser({
+            name,
+            email,
+            password,
+            interest,
+        });
         response.status(201).json({
-            message: "Success!",
+            message: 'Success!',
             createdUser,
         });
     }
     catch (error) {
-        throw new httpError_1.default("Failed to create user", 500);
+        throw new httpError_1.default('Failed to create user', 500);
     }
 });
 exports.default = createUser;

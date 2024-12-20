@@ -27,6 +27,7 @@ class UserService {
     }
     getUserByEmail(email) {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log(`Fetching user by email: ${email}`);
             try {
                 return yield user_schema_1.default.findOne({ email });
             }
@@ -36,27 +37,57 @@ class UserService {
             }
         });
     }
-    createUser(name, email, password, media) {
+    createUser(user) {
         return __awaiter(this, void 0, void 0, function* () {
+            const { name, password, email, interest } = user;
+            const existingUser = yield this.getUserByEmail(email);
+            if (existingUser) {
+                throw new Error('User with this email already exists');
+            }
             const hashedPassword = yield bcrypt_1.default.hash(password, 10);
             const newUser = new user_schema_1.default({
                 name,
                 email,
                 password: hashedPassword,
-                media,
+                interest,
             });
-            return yield newUser.save();
+            try {
+                return yield newUser.save();
+            }
+            catch (error) {
+                console.error('Error creating user:', error);
+                throw new Error('Failed to create user');
+            }
         });
     }
     updateUser(id, name, email) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield user_schema_1.default.findByIdAndUpdate(id, { name, email }, { new: true, runValidators: true });
+            try {
+                const updatedUser = yield user_schema_1.default.findByIdAndUpdate(id, { name, email }, { new: true, runValidators: true });
+                if (!updatedUser) {
+                    throw new Error('User not found');
+                }
+                return updatedUser;
+            }
+            catch (error) {
+                console.error('Error updating user:', error);
+                throw new Error('Failed to update user');
+            }
         });
     }
     deleteUser(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield user_schema_1.default.findByIdAndDelete(id);
-            return id;
+            try {
+                const user = yield user_schema_1.default.findByIdAndDelete(id);
+                if (!user) {
+                    throw new Error('User not found');
+                }
+                return id;
+            }
+            catch (error) {
+                console.error('Error deleting user:', error);
+                throw new Error('Failed to delete user');
+            }
         });
     }
 }

@@ -12,14 +12,14 @@ const authRoutes = Router();
 
 authRoutes.post(
   '/signup',
-  userValidationRules('name', 'email'),
+  userValidationRules('name', 'email', 'password', 'interest'),
   validateFilter,
   signUp
 );
 
 authRoutes.post(
   '/signin',
-  userValidationRules('name', 'email'),
+  userValidationRules('email', 'password'),
   validateFilter,
   jwtMiddleware,
   signIn

@@ -1,7 +1,7 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Request, Response } from 'express';
 
-import HttpError from "../../utils/httpError";
-import { CustomRequest } from "../../middleware/authMiddleware";
+import HttpError from '../../utils/httpError';
+import { CustomRequest } from '../../middleware/authMiddleware';
 
 const signIn = async (
   request: Request,
@@ -10,16 +10,17 @@ const signIn = async (
 ) => {
   try {
     const customRequest = request as CustomRequest;
-    if (!customRequest.token) {
-      throw new HttpError("Authentication token is missing", 401);
-    }
+
+    const user = customRequest.user;
+    const token = customRequest.token;
 
     response.status(200).json({
-      message: "Success!",
-      access_token: customRequest.token,
+      message: 'Success!',
+      access_token: token,
+      user,
     });
   } catch (error) {
-    next(new HttpError("Failed login", 500));
+    next(new HttpError('Failed login', 500));
   }
 };
 export default signIn;

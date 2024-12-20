@@ -12,7 +12,7 @@ const validateFilter = (req, res, next) => {
     }));
     if (extractedErrors) {
         res.status(422).json({
-            message: "Validation error",
+            message: 'Validation error',
             errors: extractedErrors,
         });
     }

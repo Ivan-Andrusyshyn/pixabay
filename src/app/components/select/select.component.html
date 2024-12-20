@@ -1,8 +1,13 @@
 <mat-form-field>
   <mat-label>{{ title }}</mat-label>
-  <mat-select [formControl]="controller">
+  <mat-select [formControl]="controller" *ngIf="!isMultiSelector">
     <mat-option *ngFor="let option of options" [value]="option">{{
       option
     }}</mat-option>
+  </mat-select>
+  <mat-select [formControl]="controller" multiple *ngIf="isMultiSelector">
+    @for (topping of options; track topping) {
+    <mat-option [value]="topping">{{ topping }}</mat-option>
+    }
   </mat-select>
 </mat-form-field>

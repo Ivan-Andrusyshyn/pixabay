@@ -8,14 +8,14 @@
     width: 300px;
   }
 }
-/* Button Reset */
-.btn-login {
+.form-btn {
   display: inline-block;
   padding: 12px 24px;
   font-size: 1rem;
   font-weight: 600;
+
   color: #ffffff;
-  background-color: #4caf50; /* Modern green */
+  background-color: #4caf50;
   border: none;
   border-radius: 8px;
   text-transform: uppercase;
@@ -23,25 +23,22 @@
   cursor: pointer;
   outline: none;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-}
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
-/* Hover State */
-.btn-login:hover {
-  background-color: #43a047; /* Slightly darker green */
-  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
-  transform: translateY(-2px);
-}
+  &:hover {
+    background-color: #43a047;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+  }
 
-/* Active State */
-.btn-login:active {
-  background-color: #388e3c;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  transform: translateY(1px);
-}
+  &:active {
+    background-color: #388e3c;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transform: translateY(1px);
+  }
 
-/* Focus State */
-.btn-login:focus {
-  outline: 2px solid #81c784;
-  outline-offset: 2px;
+  &:focus {
+    outline: 2px solid #81c784;
+    outline-offset: 2px;
+  }
 }

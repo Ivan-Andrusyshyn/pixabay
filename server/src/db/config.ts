@@ -1,12 +1,12 @@
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
-
-const uri = `mongodb+srv://${process.env['USER_NAME']}:${process.env['PASSWORD']}@food-diary.xroqh.mongodb.net/?retryWrites=true&w=majority&appName=food-diary`;
 dotenv.config();
+
+const url = `mongodb+srv://${process.env.USER_NAME}:${process.env.PASSWORD}@food-diary.xroqh.mongodb.net/?retryWrites=true&w=majority&appName=food-diary`;
 
 const connectDb = () => {
   mongoose
-    .connect(uri)
+    .connect(url)
     .then(() => {
       console.log('Connected with MongoDB!');
     })
