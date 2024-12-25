@@ -1,0 +1,49 @@
+<nav class="nav">
+  <ul class="nav-list">
+    <ng-container *ngFor="let route of routes">
+      <li
+        class="nav-item"
+        *ngIf="!route.isPrivate"
+        [routerLink]="route.route"
+        routerLinkActive="active"
+      >
+        {{ route.name }}
+      </li>
+      <li
+        class="nav-item"
+        *ngIf="route.isPrivate && isAuth"
+        [routerLink]="route.route"
+        routerLinkActive="active"
+      >
+        {{ route.name }}
+      </li>
+    </ng-container>
+  </ul>
+  <ul class="auth-nav-list">
+    <li
+      routerLink="auth/login"
+      routerLinkActive="active"
+      class="auth-nav-item"
+      *ngIf="!isAuth"
+    >
+      login
+    </li>
+    <li
+      routerLink="auth/signup"
+      routerLinkActive="active"
+      class="auth-nav-item"
+      *ngIf="!isAuth"
+    >
+      sign up
+    </li>
+    <li
+      routerLink="auth/signup"
+      routerLinkActive="active"
+      class="auth-nav-item"
+      (click)="onLogout()"
+      *ngIf="isAuth"
+    >
+      logout
+    </li>
+  </ul>
+</nav>

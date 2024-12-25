@@ -1,10 +1,10 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 import { BehaviorSubject } from 'rxjs';
 
 import { GalleryService } from '../../common/services/gallery.service';
-import { getImagesIds } from '../../common/utils/map-media';
-import { MediaItem } from '../../common/interfaces/media.inteface';
+import { MediaItem } from '../../common/interfaces/media.interface';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-add-gallery-button',
@@ -18,20 +18,24 @@ export class AddGalleryButtonComponent implements OnInit {
 
   private galleryService = inject(GalleryService);
   private existInGallery = new BehaviorSubject<boolean>(false);
+  private destroyRef = inject(DestroyRef);
   existInGallery$ = this.existInGallery.asObservable();
 
   ngOnInit(): void {
-    this.galleryService.getAllImages().subscribe((images) => {
-      const isExist = getImagesIds(images).includes(this.image.id);
-      this.existInGallery.next(isExist);
-    });
+    if (this.image.isInGallery) {
+      this.existInGallery.next(true);
+    } else {
+      this.existInGallery.next(false);
+    }
   }
 
   addToGallery() {
-    const isExist = this.galleryService.imagesIds.includes(this.image.id);
+    const isExist = this.galleryService.imagesIds.includes(this.image.mediaId);
     this.existInGallery.next(isExist);
-    console.log(isExist);
 
-    this.galleryService.addImage(this.image);
+    this.galleryService
+      .addImage(this.image)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe();
   }
 }

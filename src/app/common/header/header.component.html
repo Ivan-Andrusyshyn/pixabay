@@ -1,32 +1,7 @@
 <header class="header">
-  <nav class="nav">
-    <ul class="nav-list">
-      <ng-container *ngFor="let route of routes">
-        <li
-          class="nav-item"
-          *ngIf="!route.isPrivate"
-          [routerLink]="route.route"
-          routerLinkActive="active"
-        >
-          {{ route.name }}
-        </li>
-      </ng-container>
-    </ul>
-    <ul class="auth-nav-list" *ngIf="!(isAuth$ | async)">
-      <li
-        routerLink="auth/login"
-        routerLinkActive="active"
-        class="auth-nav-item"
-      >
-        login
-      </li>
-      <li
-        routerLink="auth/signup"
-        routerLinkActive="active"
-        class="auth-nav-item"
-      >
-        sign up
-      </li>
-    </ul>
-  </nav>
+  <app-header-nav
+    [routes]="routes"
+    [isAuth]="(isAuth$ | async) ?? false"
+    (logout)="logout()"
+  ></app-header-nav>
 </header>

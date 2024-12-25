@@ -2,6 +2,7 @@ import { AsyncPipe, NgIf } from '@angular/common';
 import { BehaviorSubject, delay } from 'rxjs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {
+  ChangeDetectionStrategy,
   Component,
   DestroyRef,
   inject,
@@ -11,8 +12,8 @@ import {
 
 import { AuthFormComponent } from '../../components/auth-form/auth-form.component';
 import { AuthService } from '../../common/services/auth.service';
+import { Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { SignupUser } from '../../../../server/src/interfaces/signup';
 
 @Component({
   selector: 'app-sign-up',
@@ -20,11 +21,13 @@ import { SignupUser } from '../../../../server/src/interfaces/signup';
   imports: [AuthFormComponent, NgIf, AsyncPipe],
   templateUrl: './sign-up.component.html',
   styleUrl: './sign-up.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SignUpComponent implements OnInit, OnDestroy {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private timeout: any;
+  private router = inject(Router);
   private destroyRef = inject(DestroyRef);
 
   isSuccessResponse = new BehaviorSubject(true);
@@ -38,10 +41,6 @@ export class SignUpComponent implements OnInit, OnDestroy {
       password: ['Test1111', Validators.required],
       interest: [[], Validators.required],
     });
-
-    this.timeout = setTimeout(() => {
-      this.isSuccessResponse.next(false);
-    }, 1000);
   }
 
   ngOnDestroy(): void {
@@ -53,11 +52,13 @@ export class SignUpComponent implements OnInit, OnDestroy {
     if (this.authForm.valid) {
       this.authService
         .signUp(formValue)
-        .pipe()
+        .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe((resp) => {
           if (resp.access_token) {
-            localStorage.setItem('access_token', resp.access_token);
+            sessionStorage.setItem('access_token', resp.access_token);
             this.isSuccessResponse.next(true);
+            this.authService.setAuth(true);
+            this.router.navigateByUrl('/home');
           }
         });
     }

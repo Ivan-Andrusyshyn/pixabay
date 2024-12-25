@@ -18,8 +18,8 @@ const user_1 = __importDefault(require("../services/user"));
 const httpError_1 = __importDefault(require("../utils/httpError"));
 dotenv_1.default.config();
 const jwtMiddleware = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const request = req;
     try {
+        const request = req;
         const userEmail = req.body.email;
         if (!userEmail) {
             throw new httpError_1.default('Email is required', 400);

@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   EventEmitter,
   inject,
@@ -7,18 +8,17 @@ import {
   Output,
 } from '@angular/core';
 import { AsyncPipe, NgFor, NgIf } from '@angular/common';
+import { Observable } from 'rxjs';
+import { ActivatedRoute, UrlSegment } from '@angular/router';
 
 import { AddGalleryButtonComponent } from '../add-gallery-button/add-gallery-button.component';
-import { ActivatedRoute } from '@angular/router';
-import { MediaItemService } from './media-item.service';
 import { DeleteGalleryButtonComponent } from '../delete-gallery-button/delete-gallery-button.component';
 import {
   Image,
   MediaItem,
   Video,
-} from '../../common/interfaces/media.inteface';
+} from '../../common/interfaces/media.interface';
 import { AuthService } from '../../common/services/auth.service';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-media-item',
@@ -32,6 +32,7 @@ import { Observable } from 'rxjs';
   ],
   templateUrl: './media-item.component.html',
   styleUrl: './media-item.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MediaItemComponent implements OnInit {
   @Input() mediaItem!: MediaItem;
@@ -39,21 +40,32 @@ export class MediaItemComponent implements OnInit {
   @Output() openDialog = new EventEmitter();
 
   private route = inject(ActivatedRoute);
-  private mediaItemService = inject(MediaItemService);
   private authService = inject(AuthService);
+
   isHomeRoute: boolean = false;
   isGalleryRoute: boolean = false;
+  isSearchRoute: boolean = false;
   isAuth$!: Observable<boolean>;
+
   ngOnInit(): void {
     this.isAuth$ = this.authService.isAuth$;
     this.route.url.subscribe((urlSegments) => {
-      const { home, gallery } =
-        this.mediaItemService.getCurrentUrl(urlSegments);
+      const { home, gallery, search } = this.getCurrentUrl(urlSegments);
+
       this.isHomeRoute = home;
       this.isGalleryRoute = gallery;
+      this.isSearchRoute = search;
     });
   }
+  private getCurrentUrl(urlSegments: UrlSegment[]) {
+    const path = urlSegments[0]?.path || '';
 
+    return {
+      home: path === 'home',
+      gallery: path === 'gallery',
+      search: path === 'search-media',
+    };
+  }
   onDialog() {
     this.openDialog.emit(this.mediaItem);
   }

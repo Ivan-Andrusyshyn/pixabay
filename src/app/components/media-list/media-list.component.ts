@@ -1,12 +1,18 @@
 import { AsyncPipe, NgFor, NgIf } from '@angular/common';
-import { Component, inject, Input, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  Input,
+  OnInit,
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { Observable } from 'rxjs';
 
 import { MediaItemComponent } from '../image-item/image-item.component';
 import { ImageDetailsComponent } from '../image-details/image-details.component';
 import { SwitchMediaService } from '../../common/services/switchmedia.service';
-import { Observable } from 'rxjs';
-import { MediaItem } from '../../common/interfaces/media.inteface';
+import { MediaItem } from '../../common/interfaces/media.interface';
 
 @Component({
   selector: 'app-media-list',
@@ -14,6 +20,7 @@ import { MediaItem } from '../../common/interfaces/media.inteface';
   imports: [NgFor, NgIf, AsyncPipe, MediaItemComponent],
   templateUrl: './media-list.component.html',
   styleUrl: './media-list.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MediaListComponent implements OnInit {
   @Input() media: MediaItem[] = [];

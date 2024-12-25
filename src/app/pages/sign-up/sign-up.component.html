@@ -4,7 +4,4 @@
 
     <app-auth-form (submit)="signUp()" [authForm]="authForm"></app-auth-form>
   </div>
-  <div class="message" *ngIf="isSuccessResponse$ | async">
-    Message: You successful create account!
-  </div>
 </section>

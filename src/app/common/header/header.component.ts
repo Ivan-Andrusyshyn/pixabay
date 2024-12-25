@@ -1,16 +1,23 @@
-import { AsyncPipe, NgFor, NgIf } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { AsyncPipe } from '@angular/common';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnInit,
+} from '@angular/core';
+import { Observable, of } from 'rxjs';
+
 import { routeList, RouteList } from './route-list';
 import { AuthService } from '../services/auth.service';
-import { Observable } from 'rxjs';
+import { HeaderNavComponent } from '../../components/header-nav/header-nav.component';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [NgIf, NgFor, AsyncPipe, RouterLink, RouterLinkActive],
+  imports: [AsyncPipe, HeaderNavComponent],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent implements OnInit {
   routes: RouteList[] = routeList;
@@ -18,6 +25,10 @@ export class HeaderComponent implements OnInit {
   private authService = inject(AuthService);
 
   ngOnInit(): void {
-    this.isAuth$ = this.authService.isAuth$;
+    this.isAuth$ = of(!!sessionStorage.getItem('access_token'));
+  }
+
+  logout() {
+    this.authService.logout();
   }
 }

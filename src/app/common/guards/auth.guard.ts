@@ -1,14 +1,8 @@
-import { inject } from '@angular/core';
 import { CanActivateFn } from '@angular/router';
-import { AuthService } from '../services/auth.service';
-import { catchError } from 'rxjs';
+
+import { of } from 'rxjs';
 
 export const authGuard: CanActivateFn = (route, state) => {
-  const authService = inject(AuthService);
-
-  return authService.isAuth$.pipe(
-    catchError((err) => {
-      throw err.message;
-    })
-  );
+  const isAuthenticated = Boolean(sessionStorage.getItem('access_token'));
+  return of(isAuthenticated);
 };

@@ -1,18 +1,26 @@
 <section class="profile">
-  <div class="profile__avatar">
-    <img src="assets/user-avatar.png" alt="User Avatar" />
-  </div>
-  <div class="profile__info">
-    <h2 class="profile__name">Ім'я: Іван Петренко</h2>
-    <p class="profile__email">
-      Email:
-      <a href="mailto:ivan.petrenko@email.com">{{
-        "ivan.petrenko@email.com"
-      }}</a>
-    </p>
-    <p class="profile__bio">
-      Статус: Fullstack розробник, спеціалізуюся на Angular та Node.js. Люблю
-      створювати сучасні та зручні додатки!
-    </p>
-  </div>
+   <ng-container *ngIf="user$ | async as user else spinner">
+    <div class="profile__avatar">
+      <img src="assets/user-avatar.png" alt="User Avatar" />
+    </div>
+    <div class="profile__info">
+      <h2 class="profile__name">Name:{{ user.name }}</h2>
+      <p class="profile__email">
+        Email:
+        <a [href]="'mailto:' + user.email">{{ user.email }}</a>
+      </p>
+      <p class="profile__bio">
+        Interests: 
+          @for (interest of user.interest; track $index) {
+
+            <div>  {{interest}}</div>
+          }
+      </p>
+    </div>
+  </ng-container>
+  <ng-template #spinner >
+
+    <mat-spinner></mat-spinner>
+  </ng-template>
+
 </section>

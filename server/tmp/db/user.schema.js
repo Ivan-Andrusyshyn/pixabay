@@ -70,5 +70,5 @@ UserSchema.pre('save', function (next) {
 UserSchema.methods.comparePassword = function (candidatePassword) {
     return bcrypt_1.default.compare(candidatePassword, this.password);
 };
-const User = mongoose_1.default.model('pixabay-user', UserSchema);
+const User = mongoose_1.default.model('pixabay-users', UserSchema);
 exports.default = User;

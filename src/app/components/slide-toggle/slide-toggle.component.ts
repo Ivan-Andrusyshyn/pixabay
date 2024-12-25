@@ -1,4 +1,10 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+} from '@angular/core';
 import {
   MatSlideToggleChange,
   MatSlideToggleModule,
@@ -10,6 +16,7 @@ import {
   imports: [MatSlideToggleModule],
   templateUrl: './slide-toggle.component.html',
   styleUrl: './slide-toggle.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SlideToggleComponent {
   @Output() onToggle = new EventEmitter<boolean>();

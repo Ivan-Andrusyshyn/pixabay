@@ -6,11 +6,14 @@ import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { errorInterceptor } from './common/interceptors/error.interceptor';
 import { loadingInterceptor } from './common/interceptors/loading.interceptor';
+import { authInterceptor } from './common/interceptors/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    provideHttpClient(withInterceptors([loadingInterceptor, errorInterceptor])),
+    provideHttpClient(
+      withInterceptors([errorInterceptor, loadingInterceptor, authInterceptor])
+    ),
     provideAnimationsAsync(),
   ],
 };

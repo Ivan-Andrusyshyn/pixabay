@@ -1,5 +1,7 @@
 import { Routes } from '@angular/router';
+
 import { authGuard } from './common/guards/auth.guard';
+import { profileResolver } from './common/resolvers/profile.resolver';
 
 export const routes: Routes = [
   {
@@ -13,7 +15,7 @@ export const routes: Routes = [
       import('./pages/home/home.component').then((c) => c.HomeComponent),
   },
   {
-    path: 'search-image',
+    path: 'search-media',
     loadComponent: () =>
       import('./pages/search/search.component').then((c) => c.SearchComponent),
   },
@@ -25,9 +27,9 @@ export const routes: Routes = [
       ),
     canActivate: [authGuard],
   },
-
   {
     path: 'profile',
+    resolve: { user: profileResolver },
     loadComponent: () =>
       import('./pages/profile/profile.component').then(
         (c) => c.ProfileComponent
@@ -39,6 +41,7 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/auth/auth.component').then((c) => c.AuthComponent),
     children: [
+      { path: '', redirectTo: 'login', pathMatch: 'full' },
       {
         path: 'login',
         loadComponent: () =>
@@ -53,11 +56,12 @@ export const routes: Routes = [
       },
     ],
   },
-
   {
-    path: '',
-    redirectTo: 'home',
-    pathMatch: 'full',
+    path: 'unauthorize',
+    loadComponent: () =>
+      import('./pages/unauthorize/unauthorize.component').then(
+        (c) => c.UnauthorizeComponent
+      ),
   },
   {
     path: '**',

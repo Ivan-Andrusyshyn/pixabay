@@ -21,7 +21,7 @@ const deleteUser = (request, response) => __awaiter(void 0, void 0, void 0, func
         response.status(201).send(`User with ID: ${result} deleted`);
     }
     catch (error) {
-        throw new httpError_1.default("Failed to delete user", 500);
+        throw new httpError_1.default('Failed to delete user', 500);
     }
 });
 exports.default = deleteUser;

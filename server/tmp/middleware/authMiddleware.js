@@ -20,28 +20,34 @@ const authMiddleware = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
     try {
         const authHeader = req.header('Authorization');
         if (!authHeader || !authHeader.startsWith('Bearer ')) {
-            res
+            return res
                 .status(401)
                 .json({ message: 'Authorization token missing or malformed' });
         }
         const token = authHeader === null || authHeader === void 0 ? void 0 : authHeader.replace('Bearer ', '');
-        console.log(token);
-        const decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_KEY);
-        if (!decoded || !decoded.id || !decoded.email) {
-            res.status(401).json({ message: 'Invalid token payload' });
+        const decodedUser = jsonwebtoken_1.default.verify(token, process.env.JWT_KEY);
+        if (!decodedUser || !decodedUser.id || !decodedUser.email) {
+            return res.status(401).json({ message: 'Invalid token payload' });
         }
-        req.user = decoded;
+        const userData = {
+            email: decodedUser.email,
+            id: decodedUser.id,
+            name: decodedUser.name,
+            interest: decodedUser.interest,
+        };
+        req.body.userId = decodedUser.id.toString();
+        req.user = userData;
         req.token = token;
         next();
     }
     catch (err) {
         if (err instanceof jsonwebtoken_1.default.JsonWebTokenError) {
-            res.status(401).json({ message: 'Invalid token' });
+            return res.status(401).json({ message: 'Invalid token' });
         }
         else if (err instanceof jsonwebtoken_1.default.TokenExpiredError) {
-            res.status(401).json({ message: 'Token has expired' });
+            return res.status(401).json({ message: 'Token has expired' });
         }
-        res.status(500).json({ message: err.message });
+        return res.status(500).json({ message: err.message });
     }
 });
 exports.authMiddleware = authMiddleware;

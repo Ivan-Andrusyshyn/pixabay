@@ -60,7 +60,7 @@ class UserService {
             }
         });
     }
-    updateUser(id, name, email) {
+    updateUser(name, email, id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const updatedUser = yield user_schema_1.default.findByIdAndUpdate(id, { name, email }, { new: true, runValidators: true });

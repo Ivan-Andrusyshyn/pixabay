@@ -1,4 +1,10 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+} from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
@@ -7,6 +13,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
   imports: [ReactiveFormsModule],
   templateUrl: './search-control.component.html',
   styleUrl: './search-control.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SearchControlComponent {
   @Input() searchControl!: FormControl;

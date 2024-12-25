@@ -1,4 +1,10 @@
-import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  inject,
+  OnInit,
+} from '@angular/core';
 import { BehaviorSubject, catchError, Observable } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -17,7 +23,7 @@ import { SelectComponent } from '../../components/select/select.component';
 import { SlideToggleComponent } from '../../components/slide-toggle/slide-toggle.component';
 import { MediaListComponent } from '../../components/media-list/media-list.component';
 import { SwitchMediaService } from '../../common/services/switchmedia.service';
-import { MediaItem } from '../../common/interfaces/media.inteface';
+import { MediaItem } from '../../common/interfaces/media.interface';
 
 @Component({
   selector: 'app-home',
@@ -33,6 +39,7 @@ import { MediaItem } from '../../common/interfaces/media.inteface';
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent implements OnInit {
   media$!: Observable<MediaItem[]>;
@@ -52,12 +59,12 @@ export class HomeComponent implements OnInit {
     this.orderControl.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((order) => {
-        this.media$ = this.getImagesPagination({
+        this.media$ = this.getMediaPagination({
           pageIndex: 1,
           pageSize: 10,
         });
       });
-    this.media$ = this.getImagesPagination({
+    this.media$ = this.getMediaPagination({
       pageIndex: 1,
       pageSize: 10,
     });
@@ -68,19 +75,19 @@ export class HomeComponent implements OnInit {
   handlePageEvent({ pageIndex, pageSize }: Pagination) {
     this.pageIndex = pageIndex;
     this.pageSize = pageSize;
-    this.media$ = this.getImagesPagination({ pageIndex, pageSize });
+    this.media$ = this.getMediaPagination({ pageIndex, pageSize });
   }
 
   onToggle(isToggle: boolean) {
     this.isImages = isToggle;
     this.mediaService.toggleMedia(isToggle);
-    this.media$ = this.getImagesPagination({
+    this.media$ = this.getMediaPagination({
       pageIndex: this.pageIndex,
       pageSize: this.pageSize,
     });
   }
 
-  private getImagesPagination({ pageIndex, pageSize }: Pagination) {
+  private getMediaPagination({ pageIndex, pageSize }: Pagination) {
     return this.homeService
       .getAllImages(this.isImages, pageIndex, pageSize, [
         this.orderControl.value ?? '',

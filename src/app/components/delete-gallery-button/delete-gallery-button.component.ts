@@ -1,5 +1,8 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, DestroyRef, inject, Input } from '@angular/core';
+
 import { GalleryService } from '../../common/services/gallery.service';
+import { MediaItem } from '../../common/interfaces/media.interface';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-delete-gallery-button',
@@ -9,11 +12,24 @@ import { GalleryService } from '../../common/services/gallery.service';
   styleUrl: './delete-gallery-button.component.scss',
 })
 export class DeleteGalleryButtonComponent {
-  @Input() imageId!: number;
+  @Input() image!: MediaItem;
 
-  galleryService = inject(GalleryService);
+  private destroyRef = inject(DestroyRef);
+
+  private galleryService = inject(GalleryService);
 
   deleteFromGallery() {
-    this.galleryService.deleteImage(this.imageId);
+    const imageId = this.image._id as number;
+    if (!imageId) console.error('Wrong id type');
+
+    this.galleryService
+      .deleteImage(imageId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((res) => {
+        const filterMedia = this.galleryService.gallery.value.filter(
+          (item) => item._id !== imageId
+        );
+        this.galleryService.gallery.next(filterMedia);
+      });
   }
 }

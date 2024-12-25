@@ -11,9 +11,9 @@ const delete_user_1 = __importDefault(require("../controller/user/delete-user"))
 const user_1 = __importDefault(require("../validation/user"));
 const validateFilter_1 = __importDefault(require("../middleware/validateFilter"));
 const userRouter = (0, express_1.Router)();
-userRouter.get('/users', get_user_1.getUsers);
-userRouter.get('/users/:id', (0, user_1.default)('id'), validateFilter_1.default, get_user_1.getUserById);
-userRouter.post('/users', (0, user_1.default)('name', 'email'), validateFilter_1.default, create_user_1.default);
-userRouter.put('/users/:id', (0, user_1.default)('name', 'email', 'id'), validateFilter_1.default, update_user_1.default);
-userRouter.delete('/users/:id', (0, user_1.default)('id'), validateFilter_1.default, delete_user_1.default);
+userRouter.get('', get_user_1.getUsers);
+userRouter.get('/:id', (0, user_1.default)('id'), validateFilter_1.default, get_user_1.getUserById);
+userRouter.post('/add-user', (0, user_1.default)('name', 'email'), validateFilter_1.default, create_user_1.default);
+userRouter.put('/change-user/:id', (0, user_1.default)('name', 'email', 'id'), validateFilter_1.default, update_user_1.default);
+userRouter.delete('/delete-user/:id', (0, user_1.default)('id'), validateFilter_1.default, delete_user_1.default);
 exports.default = userRouter;

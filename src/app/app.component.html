@@ -1,8 +1,8 @@
 <app-header></app-header>
 <app-progress-bar
-  *ngIf="(loading$ | async) && (isReqMethodGet | async)"
+  *ngIf="(loading$ | async) && (isReqMethodGet$ | async)"
 ></app-progress-bar>
-<div class="backdrop" *ngIf="(loading$ | async) && !(isReqMethodGet | async)">
+<div class="backdrop" *ngIf="(loading$ | async) && !(isReqMethodGet$ | async)">
   <mat-spinner></mat-spinner>
 </div>
 

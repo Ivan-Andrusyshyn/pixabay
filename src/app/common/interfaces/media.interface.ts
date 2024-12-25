@@ -1,9 +1,12 @@
 interface Media {
   comments: number;
   downloads: number;
-  id: number;
+  mediaId: number;
   likes: number;
+  _id?: number;
+  isInGallery: boolean;
   tags: string[];
+  userId?: number;
 }
 
 interface Video extends Media {
@@ -21,4 +24,12 @@ interface Image extends Media {
 
 type MediaItem = Image | Video;
 
-export { MediaItem, Video, Image };
+interface MediaResponse {
+  media: MediaItem[];
+  message: string;
+}
+interface MediaIdResponse {
+  message: string;
+  ids: number[];
+}
+export { MediaItem, Video, Image, MediaIdResponse, MediaResponse };

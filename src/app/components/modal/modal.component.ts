@@ -1,4 +1,9 @@
-import { Component, inject, model } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  model,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
   MAT_DIALOG_DATA,
@@ -17,15 +22,10 @@ export interface DialogData {
 @Component({
   selector: 'app-modal',
   standalone: true,
-  imports: [
-    FormsModule,
-    MatDialogTitle,
-    MatDialogClose,
-    MatDialogActions,
-    MatDialogContent,
-  ],
+  imports: [FormsModule, MatDialogClose, MatDialogActions, MatDialogContent],
   templateUrl: './modal.component.html',
   styleUrl: './modal.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ModalComponent {
   readonly dialogRef = inject(MatDialogRef<any>);

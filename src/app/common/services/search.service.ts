@@ -1,10 +1,18 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, map, Observable } from 'rxjs';
+import {
+  BehaviorSubject,
+  catchError,
+  map,
+  Observable,
+  of,
+  switchMap,
+} from 'rxjs';
 
 import resImages from '../interfaces/res-images.interface';
 import { buildMediaObject } from '../utils/map-media';
 import requestBuilder from '../utils/request-builder';
+import { GalleryService } from './gallery.service';
 
 interface Search {
   isImages: boolean;
@@ -17,7 +25,10 @@ interface Search {
 })
 export class SearchService {
   private totalLength = new BehaviorSubject<number>(0);
-  constructor(private readonly http: HttpClient) {}
+  constructor(
+    private readonly http: HttpClient,
+    private readonly galleryService: GalleryService
+  ) {}
 
   getTotalNumber() {
     return this.totalLength.asObservable();
@@ -25,7 +36,7 @@ export class SearchService {
   resetTotalNumber() {
     this.totalLength.next(0);
   }
-  searchImages(
+  searchMedia(
     { isImages, pageIndex = 1, pageSize = 10, value }: Search,
     options: string[]
   ): Observable<any> {
@@ -36,11 +47,18 @@ export class SearchService {
       .pipe(
         map(({ hits, totalHits }) => {
           this.totalLength.next(totalHits);
-          return buildMediaObject(isImages, hits);
+          const { idList, mediaList } = buildMediaObject(isImages, hits);
+          this.galleryService.imagesIds = idList;
+          return { idList, mediaList };
         }),
         catchError((err) => {
-          throw err.message;
-        })
+          console.error(err.message);
+          return of({ idList: [], mediaList: [] });
+        }),
+        map(({ idList, mediaList }) =>
+          this.galleryService.checkMediaInGallery({ idList, mediaList })
+        ),
+        switchMap((observable) => observable)
       );
   }
 }

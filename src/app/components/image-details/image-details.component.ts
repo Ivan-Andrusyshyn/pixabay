@@ -6,7 +6,7 @@ import {
   Image,
   MediaItem,
   Video,
-} from '../../common/interfaces/media.inteface';
+} from '../../common/interfaces/media.interface';
 
 @Component({
   selector: 'app-image-details',

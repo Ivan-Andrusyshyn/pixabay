@@ -1,4 +1,11 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  inject,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { AsyncPipe, NgIf } from '@angular/common';
 import {
   BehaviorSubject,
@@ -20,10 +27,11 @@ import { MediaListComponent } from '../../components/media-list/media-list.compo
 import { SearchService } from '../../common/services/search.service';
 import { SearchControlComponent } from '../../components/search-control/search-control.component';
 import { Category, Order } from '../../common/content/filter';
-import { MediaItem } from '../../common/interfaces/media.inteface';
+import { MediaItem } from '../../common/interfaces/media.interface';
 import { SwitchMediaService } from '../../common/services/switchmedia.service';
 import { SlideToggleComponent } from '../../components/slide-toggle/slide-toggle.component';
 import { SelectComponent } from '../../components/select/select.component';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-search',
@@ -42,10 +50,12 @@ import { SelectComponent } from '../../components/select/select.component';
   ],
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SearchComponent implements OnInit, OnDestroy {
   private readonly searchService = inject(SearchService);
   private readonly mediaService = inject(SwitchMediaService);
+  private destroyRef = inject(DestroyRef);
 
   images: Observable<MediaItem[]> = new BehaviorSubject<MediaItem[]>(
     []
@@ -60,7 +70,6 @@ export class SearchComponent implements OnInit, OnDestroy {
   options = [...Order, ...Category];
   totalLength$!: Observable<number>;
   isImages: boolean = true;
-  constructor() {}
 
   ngOnInit(): void {
     combineLatest([
@@ -71,16 +80,18 @@ export class SearchComponent implements OnInit, OnDestroy {
       this.optionsControl.valueChanges.pipe(
         startWith(this.optionsControl.value)
       ),
-    ]).subscribe(([query, options]) => {
-      if (query?.trim()) {
-        this.images = this.getImagesPagination({
-          pageIndex: this.pageIndex,
-          pageSize: this.pageSize,
-        });
-      } else {
-        this.resetSearch();
-      }
-    });
+    ])
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(([query, options]) => {
+        if (query?.trim()) {
+          this.images = this.getImagesPagination({
+            pageIndex: this.pageIndex,
+            pageSize: this.pageSize,
+          });
+        } else {
+          this.resetSearch();
+        }
+      });
 
     this.totalLength$ = this.searchService.getTotalNumber();
   }
@@ -116,7 +127,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     };
     const options = this.optionsControl.value ?? '';
     const selectedOptions = [...options];
-    return this.searchService.searchImages(mainOptions, selectedOptions).pipe(
+    return this.searchService.searchMedia(mainOptions, selectedOptions).pipe(
       catchError((err) => {
         throw err.message;
       })

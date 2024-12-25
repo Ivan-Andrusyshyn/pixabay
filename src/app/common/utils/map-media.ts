@@ -1,18 +1,21 @@
-import { MediaItem } from '../interfaces/media.inteface';
+import { MediaItem } from '../interfaces/media.interface';
 
 const splitTags = (tags: any) => {
   return tags ? tags.split(',').map((tag: string) => tag.trim()) : [];
 };
 
-const buildMediaObject = (isImages: boolean, data: MediaItem[]) =>
-  data.map((item: any) => {
+const buildMediaObject = (isImages: boolean, data: MediaItem[]) => {
+  let idList: number[] = [];
+  const mediaList = data.map((item: any) => {
     let media = {
       tags: splitTags(item.tags),
-      id: item.id,
+      mediaId: item.id,
       likes: item.likes,
       comments: item.comments,
       downloads: item.downloads,
+      isInGallery: false,
     };
+    idList.push(item.id);
     return isImages
       ? {
           ...media,
@@ -25,9 +28,10 @@ const buildMediaObject = (isImages: boolean, data: MediaItem[]) =>
           },
         };
   });
-
+  return { mediaList, idList };
+};
 const getImagesIds = (media: MediaItem[]): number[] => {
-  return media.map((item) => item.id);
+  return media.map((item) => item.mediaId);
 };
 
 export { buildMediaObject, getImagesIds };

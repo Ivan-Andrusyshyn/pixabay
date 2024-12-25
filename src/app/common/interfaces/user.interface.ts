@@ -1,7 +1,7 @@
 interface User {
   name: string;
   email: string;
-  password: string;
+  password?: string;
   interest: string[];
 }
 interface LoginUser {
@@ -9,7 +9,7 @@ interface LoginUser {
   password: string;
 }
 interface AuthUser {
-  access_token: string;
+  access_token?: string;
   message: string;
   user?: {
     name: string;

@@ -1,5 +1,5 @@
 import { NgFor, NgIf } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 
@@ -9,6 +9,7 @@ import { MatSelectModule } from '@angular/material/select';
   imports: [MatSelectModule, ReactiveFormsModule, NgIf, NgFor],
   templateUrl: './select.component.html',
   styleUrl: './select.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SelectComponent {
   @Input() options!: string[];

@@ -1,0 +1,22 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const validateFilter_1 = __importDefault(require("../middleware/validateFilter"));
+const getMedia_1 = require("../controller/gallery/getMedia");
+const createMedia_1 = __importDefault(require("../controller/gallery/createMedia"));
+const updateMedia_1 = __importDefault(require("../controller/gallery/updateMedia"));
+const deleteMedia_1 = __importDefault(require("../controller/gallery/deleteMedia"));
+const gallery_1 = __importDefault(require("../validation/gallery"));
+const authMiddleware_1 = __importDefault(require("../middleware/authMiddleware"));
+const getAllMediaByIdList_1 = __importDefault(require("../controller/gallery/getAllMediaByIdList"));
+const galleryRouter = (0, express_1.Router)();
+galleryRouter.get('', authMiddleware_1.default, (0, gallery_1.default)('userId'), validateFilter_1.default, getMedia_1.getGallery);
+galleryRouter.get('/:id', authMiddleware_1.default, (0, gallery_1.default)('mediaId'), validateFilter_1.default, getMedia_1.getMediaItemById);
+galleryRouter.post('/id-list', authMiddleware_1.default, getAllMediaByIdList_1.default);
+galleryRouter.post('/add-media', authMiddleware_1.default, (0, gallery_1.default)('comments', 'downloads', 'mediaId', 'likes', 'tags', 'userId'), validateFilter_1.default, createMedia_1.default);
+galleryRouter.put('/change-media/:id', authMiddleware_1.default, (0, gallery_1.default)('mediaId'), validateFilter_1.default, updateMedia_1.default);
+galleryRouter.delete('/delete-media/:id', authMiddleware_1.default, deleteMedia_1.default);
+exports.default = galleryRouter;

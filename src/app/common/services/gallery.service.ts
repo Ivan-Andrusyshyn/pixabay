@@ -1,8 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, of } from 'rxjs';
 
-import { MediaItem } from '../interfaces/media.inteface';
+import {
+  MediaIdResponse,
+  MediaItem,
+  MediaResponse,
+} from '../interfaces/media.interface';
+import { environment } from '../../env/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -10,21 +15,81 @@ import { MediaItem } from '../interfaces/media.inteface';
 export class GalleryService {
   constructor(private readonly http: HttpClient) {}
 
-  private gallery = new BehaviorSubject<MediaItem[]>([]);
+  gallery = new BehaviorSubject<MediaItem[]>([]);
   imagesIds: number[] = [];
 
   addImage(image: MediaItem) {
-    this.gallery.next([...this.gallery.value, image]);
+    return this.http
+      .post<MediaResponse>(
+        environment.apiUrl + '/gallery' + '/add-media',
+        image
+      )
+      .pipe(
+        catchError((err) => {
+          throw err.message;
+        })
+      );
   }
 
-  deleteImage(imageId: number) {
-    const filterImages = this.gallery.value.filter(
-      (image) => image.id !== imageId
+  getGallery(): Observable<MediaItem[]> {
+    return this.http.get<MediaResponse>(environment.apiUrl + '/gallery').pipe(
+      catchError((err) => {
+        throw err.message;
+      }),
+      map((res) => {
+        this.gallery.next(res.media);
+        return res.media;
+      })
     );
-    this.gallery.next(filterImages);
+  }
+  getAllMediaByIdList(idList: number[]): Observable<number[]> {
+    return this.http
+      .post<MediaIdResponse>(environment.apiUrl + '/gallery' + '/id-list', {
+        idList,
+      })
+      .pipe(
+        catchError((err) => {
+          throw err.message;
+        }),
+        map((res) => res.ids)
+      );
+  }
+  deleteImage(imageId: number) {
+    return this.http
+      .delete<MediaResponse>(
+        environment.apiUrl + '/gallery' + '/delete-media' + '/' + imageId
+      )
+      .pipe(
+        catchError((err) => {
+          throw err.message;
+        })
+      );
   }
 
-  getAllImages() {
+  getAllMedia() {
     return this.gallery.asObservable();
+  }
+
+  checkMediaInGallery({
+    idList,
+    mediaList,
+  }: {
+    idList: number[];
+    mediaList: MediaItem[];
+  }): Observable<MediaItem[]> {
+    return this.getAllMediaByIdList(idList).pipe(
+      map((ids) => {
+        return mediaList.map((item) => {
+          return {
+            ...item,
+            isInGallery: ids.includes(item.mediaId),
+          };
+        });
+      }),
+      catchError((err) => {
+        console.error('Error in check gallery:', err.message);
+        return of(mediaList.map((item) => ({ ...item, isInGallery: false })));
+      })
+    );
   }
 }
