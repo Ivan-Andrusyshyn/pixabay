@@ -1,6 +1,6 @@
 <div class="login">
   <div>
     <h2>{{ title }}</h2>
-    <app-auth-form (submit)="login()" [authForm]="authForm"></app-auth-form>
+    <app-auth-form (authSubmit)="login($event)"></app-auth-form>
   </div>
 </div>

@@ -12,26 +12,37 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const httpError_1 = __importDefault(require("../../utils/httpError"));
 const user_1 = __importDefault(require("../../services/user"));
+const token_1 = __importDefault(require("../../services/token"));
 const signUp = (request, response) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { name, email, password, interest } = request.body;
-        const token = jsonwebtoken_1.default.sign({ name, email, interest }, process.env.JWT_KEY, {
-            expiresIn: '45m',
-        });
         const createdUser = yield user_1.default.createUser({
             name,
             email,
             password,
             interest,
         });
-        console.log(createdUser);
+        token_1.default.createAccessToken({
+            name,
+            email,
+            interest,
+            _id: createdUser._id,
+        });
+        const token = token_1.default.getToken();
+        if (!token) {
+            response.status(500).json({ message: 'Server error!' });
+        }
         response.status(200).json({
             message: 'Success!',
             access_token: token,
-            user: { name, email, interest },
+            user: {
+                name,
+                email,
+                interest,
+                _id: createdUser._id,
+            },
         });
     }
     catch (error) {

@@ -17,7 +17,7 @@ class GalleryService {
     getGallery(userId) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                return yield gallery_schema_1.default.find().sort(userId);
+                return yield gallery_schema_1.default.find({ userId });
             }
             catch (error) {
                 console.error('Error fetching gallery items:', error);
@@ -37,13 +37,16 @@ class GalleryService {
             }
         });
     }
-    getAllMediaByIdList(idList) {
+    getAllMediaByIdList(userId, idList) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 if (!idList || idList.length === 0) {
                     return [];
                 }
-                return yield gallery_schema_1.default.find({ mediaId: { $in: idList } });
+                return yield gallery_schema_1.default.find({
+                    userId,
+                    mediaId: { $in: idList },
+                });
             }
             catch (error) {
                 console.error('Error fetching media item by ID:', error);

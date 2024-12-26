@@ -48,7 +48,7 @@ export class SearchService {
         map(({ hits, totalHits }) => {
           this.totalLength.next(totalHits);
           const { idList, mediaList } = buildMediaObject(isImages, hits);
-          this.galleryService.imagesIds = idList;
+          this.galleryService.mediaIds = idList;
           return { idList, mediaList };
         }),
         catchError((err) => {

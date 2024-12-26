@@ -26,16 +26,16 @@ const authMiddleware = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
         }
         const token = authHeader === null || authHeader === void 0 ? void 0 : authHeader.replace('Bearer ', '');
         const decodedUser = jsonwebtoken_1.default.verify(token, process.env.JWT_KEY);
-        if (!decodedUser || !decodedUser.id || !decodedUser.email) {
+        if (!decodedUser.name || !decodedUser._id || !decodedUser.email) {
             return res.status(401).json({ message: 'Invalid token payload' });
         }
         const userData = {
             email: decodedUser.email,
-            id: decodedUser.id,
+            _id: decodedUser._id,
             name: decodedUser.name,
             interest: decodedUser.interest,
         };
-        req.body.userId = decodedUser.id.toString();
+        req.body.userId = decodedUser._id.toString();
         req.user = userData;
         req.token = token;
         next();

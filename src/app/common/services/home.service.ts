@@ -30,7 +30,7 @@ export class HomeService {
     return this.totalLength.asObservable();
   }
 
-  getAllImages(
+  getAllMedia(
     isImages = true,
     pageIndex: number = 1,
     perPage: number = 10,
@@ -46,7 +46,7 @@ export class HomeService {
         map(({ hits, totalHits }) => {
           this.totalLength.next(totalHits);
           const { idList, mediaList } = buildMediaObject(isImages, hits);
-          this.galleryService.imagesIds = idList;
+          this.galleryService.mediaIds = idList;
           return { idList, mediaList };
         }),
         catchError((err) => {

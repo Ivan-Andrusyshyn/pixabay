@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const httpError_1 = __importDefault(require("../../utils/httpError"));
 const gallery_1 = __importDefault(require("../../services/gallery"));
 const updateMediaItem = (request, response) => __awaiter(void 0, void 0, void 0, function* () {
-    const id = parseInt(request.params.id);
+    const _id = request.params.id.toString();
     const mediaData = request.body;
     if (!mediaData) {
         response.status(204).send({
@@ -23,7 +23,7 @@ const updateMediaItem = (request, response) => __awaiter(void 0, void 0, void 0,
         });
     }
     try {
-        const updatedUser = yield gallery_1.default.updateMediaItem(id, mediaData);
+        const updatedUser = yield gallery_1.default.updateMediaItem(Object.assign({ _id }, mediaData));
         response.status(201).json({
             message: 'Success!',
             updatedUser,

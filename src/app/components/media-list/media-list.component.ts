@@ -9,10 +9,10 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 
-import { MediaItemComponent } from '../image-item/image-item.component';
-import { ImageDetailsComponent } from '../image-details/image-details.component';
+import { MediaItemComponent } from '../media-item/media-item.component';
 import { SwitchMediaService } from '../../common/services/switchmedia.service';
 import { MediaItem } from '../../common/interfaces/media.interface';
+import { MediaDetailsComponent } from '../media-details/media-details.component';
 
 @Component({
   selector: 'app-media-list',
@@ -35,7 +35,7 @@ export class MediaListComponent implements OnInit {
   }
 
   openDialog(image: MediaItem) {
-    const dialogRef = this.dialog.open(ImageDetailsComponent, { data: image });
+    const dialogRef = this.dialog.open(MediaDetailsComponent, { data: image });
 
     dialogRef.afterClosed().subscribe((result) => {
       console.log(`Dialog result: ${result}`);

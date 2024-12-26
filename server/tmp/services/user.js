@@ -25,14 +25,14 @@ class UserService {
             return yield user_schema_1.default.findById(id);
         });
     }
-    getUserByEmail(email) {
+    getUserByEmail(value) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log(`Fetching user by email: ${email}`);
             try {
-                return yield user_schema_1.default.findOne({ email });
+                const result = yield user_schema_1.default.findOne(value);
+                console.log(result);
+                return result;
             }
             catch (error) {
-                console.error('Error fetching user by email:', error);
                 throw new Error('Failed to fetch user by email');
             }
         });
@@ -40,18 +40,18 @@ class UserService {
     createUser(user) {
         return __awaiter(this, void 0, void 0, function* () {
             const { name, password, email, interest } = user;
-            const existingUser = yield this.getUserByEmail(email);
-            if (existingUser) {
-                throw new Error('User with this email already exists');
-            }
-            const hashedPassword = yield bcrypt_1.default.hash(password, 10);
-            const newUser = new user_schema_1.default({
-                name,
-                email,
-                password: hashedPassword,
-                interest,
-            });
             try {
+                const existingUser = yield this.getUserByEmail({ email, name });
+                if (existingUser) {
+                    throw new Error('User already exists. Check name or email');
+                }
+                const hashedPassword = yield bcrypt_1.default.hash(password, 10);
+                const newUser = new user_schema_1.default({
+                    name,
+                    email,
+                    password: hashedPassword,
+                    interest,
+                });
                 return yield newUser.save();
             }
             catch (error) {

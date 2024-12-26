@@ -1,7 +1,3 @@
 <header class="header">
-  <app-header-nav
-    [routes]="routes"
-    [isAuth]="(isAuth$ | async) ?? false"
-    (logout)="logout()"
-  ></app-header-nav>
+  <app-header-nav [routes]="routes" (logout)="logout()"></app-header-nav>
 </header>

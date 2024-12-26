@@ -16,7 +16,7 @@ exports.getMediaItemById = exports.getGallery = void 0;
 const httpError_1 = __importDefault(require("../../utils/httpError"));
 const gallery_1 = __importDefault(require("../../services/gallery"));
 const getGallery = (request, response, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const userId = request.user.id;
+    const userId = request.user._id;
     try {
         const result = yield gallery_1.default.getGallery(userId);
         response.status(200).json({

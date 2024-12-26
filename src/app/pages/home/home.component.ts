@@ -49,9 +49,10 @@ export class HomeComponent implements OnInit {
   orders: string[] = Order;
   orderControl = new FormControl('');
   isImages = true;
-  destroyRef = inject(DestroyRef);
   pageIndex: number = 1;
   pageSize: number = 10;
+
+  private readonly destroyRef = inject(DestroyRef);
   private readonly homeService = inject(HomeService);
   private readonly mediaService = inject(SwitchMediaService);
 
@@ -89,7 +90,7 @@ export class HomeComponent implements OnInit {
 
   private getMediaPagination({ pageIndex, pageSize }: Pagination) {
     return this.homeService
-      .getAllImages(this.isImages, pageIndex, pageSize, [
+      .getAllMedia(this.isImages, pageIndex, pageSize, [
         this.orderControl.value ?? '',
       ])
       .pipe(

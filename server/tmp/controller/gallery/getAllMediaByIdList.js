@@ -16,9 +16,11 @@ const httpError_1 = __importDefault(require("../../utils/httpError"));
 const gallery_1 = __importDefault(require("../../services/gallery"));
 const getAllMediaByIdList = (request, response, next) => __awaiter(void 0, void 0, void 0, function* () {
     const idList = request.body.idList;
+    const userId = request.user._id;
     try {
-        const result = yield gallery_1.default.getAllMediaByIdList(idList);
+        const result = yield gallery_1.default.getAllMediaByIdList(userId, idList);
         const ids = result === null || result === void 0 ? void 0 : result.map((item) => item.mediaId);
+        console.log(ids);
         response.status(200).json({
             message: 'Success!',
             ids,

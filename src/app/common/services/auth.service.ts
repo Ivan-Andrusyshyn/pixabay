@@ -1,21 +1,30 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, map, Observable, throwError } from 'rxjs';
+import { Router } from '@angular/router';
+
 import { AuthUser, LoginUser, User } from '../interfaces/user.interface';
 import { environment } from '../../env/environment';
-import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private http: HttpClient, private router: Router) {}
   private isAuth = new BehaviorSubject<boolean>(false);
   private user = new BehaviorSubject<User | null>(null);
+
   isAuth$ = this.isAuth.asObservable();
   user$ = this.user.asObservable();
 
-  login(user: LoginUser) {
+  constructor(private http: HttpClient, private router: Router) {
+    if (sessionStorage.getItem('access_token')) {
+      this.setAuth(true);
+    } else {
+      this.setAuth(false);
+    }
+  }
+
+  login(user: LoginUser): Observable<any> {
     return this.http
       .post<AuthUser>(environment.apiUrl + '/auth' + '/signin', user)
       .pipe(
@@ -24,7 +33,7 @@ export class AuthService {
         })
       );
   }
-  signUp(user: User) {
+  signUp(user: User): Observable<any> {
     return this.http
       .post<AuthUser>(environment.apiUrl + '/auth' + '/signup', user)
       .pipe(
@@ -58,7 +67,9 @@ export class AuthService {
         })
       );
   }
-
+  setUser(value: User) {
+    this.user.next(value);
+  }
   setAuth(value: boolean) {
     this.isAuth.next(value);
   }
@@ -66,7 +77,6 @@ export class AuthService {
   logout() {
     sessionStorage.removeItem('access_token');
     sessionStorage.removeItem('user');
-    this.router.navigate(['/auth/login']);
     this.isAuth.next(false);
   }
 }

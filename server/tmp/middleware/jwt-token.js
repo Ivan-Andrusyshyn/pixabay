@@ -12,10 +12,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const user_1 = __importDefault(require("../services/user"));
 const httpError_1 = __importDefault(require("../utils/httpError"));
+const token_1 = __importDefault(require("../services/token"));
 dotenv_1.default.config();
 const jwtMiddleware = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -24,27 +24,26 @@ const jwtMiddleware = (req, res, next) => __awaiter(void 0, void 0, void 0, func
         if (!userEmail) {
             throw new httpError_1.default('Email is required', 400);
         }
-        const result = yield user_1.default.getUserByEmail(userEmail);
+        const result = yield user_1.default.getUserByEmail({ email: userEmail });
         if (!result) {
             throw new httpError_1.default('User does not exist', 401);
         }
         const { _id, name, email, interest } = result;
+        console.log(_id);
         if (!_id || !name || !email) {
             throw new httpError_1.default('Invalid user data', 500);
         }
         const userData = {
-            id: _id.toString(),
+            _id: _id.toString(),
             name,
             email,
             interest,
         };
-        const jwtKey = process.env.JWT_KEY;
-        if (!jwtKey) {
-            throw new httpError_1.default('JWT key is not configured', 500);
+        token_1.default.createAccessToken(userData);
+        const token = token_1.default.getToken();
+        if (!token) {
+            throw 'Something wrong with token';
         }
-        const token = jsonwebtoken_1.default.sign(userData, jwtKey, {
-            expiresIn: '45m',
-        });
         request.token = token;
         request.user = userData;
         next();

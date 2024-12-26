@@ -30,7 +30,7 @@ export class AddGalleryButtonComponent implements OnInit {
   }
 
   addToGallery() {
-    const isExist = this.galleryService.imagesIds.includes(this.image.mediaId);
+    const isExist = this.galleryService.mediaIds.includes(this.image.mediaId);
     this.existInGallery.next(isExist);
 
     this.galleryService

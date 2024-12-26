@@ -11,7 +11,7 @@
       </li>
       <li
         class="nav-item"
-        *ngIf="route.isPrivate && isAuth"
+        *ngIf="route.isPrivate && (isAuth$ | async)"
         [routerLink]="route.route"
         routerLinkActive="active"
       >
@@ -24,7 +24,7 @@
       routerLink="auth/login"
       routerLinkActive="active"
       class="auth-nav-item"
-      *ngIf="!isAuth"
+      *ngIf="!(isAuth$ | async)"
     >
       login
     </li>
@@ -32,7 +32,7 @@
       routerLink="auth/signup"
       routerLinkActive="active"
       class="auth-nav-item"
-      *ngIf="!isAuth"
+      *ngIf="!(isAuth$ | async)"
     >
       sign up
     </li>
@@ -41,7 +41,7 @@
       routerLinkActive="active"
       class="auth-nav-item"
       (click)="onLogout()"
-      *ngIf="isAuth"
+      *ngIf="isAuth$ | async"
     >
       logout
     </li>

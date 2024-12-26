@@ -16,7 +16,7 @@ export class GalleryService {
   constructor(private readonly http: HttpClient) {}
 
   gallery = new BehaviorSubject<MediaItem[]>([]);
-  imagesIds: number[] = [];
+  mediaIds: number[] = [];
 
   addImage(image: MediaItem) {
     return this.http
@@ -43,6 +43,8 @@ export class GalleryService {
     );
   }
   getAllMediaByIdList(idList: number[]): Observable<number[]> {
+    const token = sessionStorage.getItem('access_token');
+    if (!token) return of([]);
     return this.http
       .post<MediaIdResponse>(environment.apiUrl + '/gallery' + '/id-list', {
         idList,

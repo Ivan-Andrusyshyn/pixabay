@@ -9,13 +9,13 @@ import {
 } from '../../common/interfaces/media.interface';
 
 @Component({
-  selector: 'app-image-details',
+  selector: 'app-media-details',
   standalone: true,
   imports: [NgFor, NgIf],
-  templateUrl: './image-details.component.html',
-  styleUrl: './image-details.component.scss',
+  templateUrl: './media-details.component.html',
+  styleUrl: './media-details.component.scss',
 })
-export class ImageDetailsComponent {
+export class MediaDetailsComponent {
   constructor(@Inject(MAT_DIALOG_DATA) public mediaItem: MediaItem) {
     console.log('Полученные данные о картинке:', this.mediaItem);
   }
