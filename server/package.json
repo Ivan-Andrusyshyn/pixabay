@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build": "tsc --outDir build",
     "serve": "concurrently --kill-others \"tsc --watch\" \"nodemon ./build/app.js \"",
     "start": "node build/app.js"
   },
