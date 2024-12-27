@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://pixabay-server-fk7ptjzvs-wq1.vercel.app',
+  apiUrl: 'https://pixabay-server.vercel.app',
 };
