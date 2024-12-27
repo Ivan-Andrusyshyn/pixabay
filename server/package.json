@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "serve": "concurrently --kill-others \"tsc --watch\" \"nodemon ./build/app.js \"",
-    "start": "node /build/app.js"
+    "start": "node build/app.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
