@@ -32,6 +32,7 @@ import { MediaItem } from '../../common/interfaces/media.interface';
 import { SwitchMediaService } from '../../common/services/switchmedia.service';
 import { SlideToggleComponent } from '../../components/slide-toggle/slide-toggle.component';
 import { SelectComponent } from '../../components/select/select.component';
+import { AuthService } from '../../common/services/auth.service';
 
 @Component({
   selector: 'app-search',
@@ -56,11 +57,12 @@ export class SearchComponent implements OnInit, OnDestroy {
   private readonly searchService = inject(SearchService);
   private readonly mediaService = inject(SwitchMediaService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly authService = inject(AuthService);
 
   images$!: Observable<MediaItem[]>;
 
   searchControl = new FormControl('');
-  optionsControl = new FormControl('');
+  optionsControl: FormControl<any> = new FormControl('');
 
   isMultiSelector: boolean = true;
   pageIndex = 1;
@@ -90,12 +92,23 @@ export class SearchComponent implements OnInit, OnDestroy {
           this.resetSearch();
         }
       });
+    this.setUserInterests();
 
     this.totalLength$ = this.searchService.getTotalNumber();
   }
 
   ngOnDestroy(): void {
     this.resetSearch();
+  }
+
+  private setUserInterests() {
+    const userInterests: string[] =
+      this.authService.getUserData()?.interest ?? [];
+    if (userInterests.length > 0) {
+      this.optionsControl.setValue(userInterests);
+    } else {
+      this.optionsControl.setValue('');
+    }
   }
   clearInput() {
     this.searchControl.reset();

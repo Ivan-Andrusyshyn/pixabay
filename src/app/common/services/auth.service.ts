@@ -23,6 +23,9 @@ export class AuthService {
       this.setAuth(false);
     }
   }
+  getUserData(): User | null {
+    return this.user.value;
+  }
 
   login(user: LoginUser): Observable<any> {
     return this.http
