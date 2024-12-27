@@ -4,8 +4,8 @@
   "description": "",
   "scripts": {
     "build": "tsc --outDir build",
-    "serve": "concurrently --kill-others \"tsc --watch\" \"nodemon ./tmp/app.js \"",
-    "start": "node tmp/app.js"
+    "serve": "concurrently --kill-others \"tsc --watch\" \"nodemon ./build/app.js \"",
+    "start": "node build/app.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
