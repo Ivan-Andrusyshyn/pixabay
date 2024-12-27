@@ -1,5 +1,5 @@
 .search {
-  padding: 20px;
+  padding: 8px;
   border-radius: 16px;
   width: 100%;
   min-height: 600px;
@@ -9,15 +9,25 @@
   flex-direction: column;
   position: relative;
   .search-panel {
-    gap: 1rem;
-    display: flex;
-    align-items: center;
+    margin-bottom: 2rem;
+    @media screen and (min-width: 768px) {
+      display: flex;
+      margin-bottom: 0;
+      gap: 1rem;
+      padding: 20px;
+      align-items: center;
+    }
   }
   .select-wrapper {
     gap: 1rem;
 
     display: flex;
     flex-wrap: wrap;
+    margin-top: 1rem;
+
+    @media screen and (min-width: 768px) {
+      margin-top: 0;
+    }
   }
   .search-bg {
     content: " ";

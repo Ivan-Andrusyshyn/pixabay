@@ -18,6 +18,7 @@ import {
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import {
   Pagination,
@@ -31,7 +32,6 @@ import { MediaItem } from '../../common/interfaces/media.interface';
 import { SwitchMediaService } from '../../common/services/switchmedia.service';
 import { SlideToggleComponent } from '../../components/slide-toggle/slide-toggle.component';
 import { SelectComponent } from '../../components/select/select.component';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-search',
@@ -55,11 +55,9 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 export class SearchComponent implements OnInit, OnDestroy {
   private readonly searchService = inject(SearchService);
   private readonly mediaService = inject(SwitchMediaService);
-  private destroyRef = inject(DestroyRef);
+  private readonly destroyRef = inject(DestroyRef);
 
-  images: Observable<MediaItem[]> = new BehaviorSubject<MediaItem[]>(
-    []
-  ).asObservable();
+  images$!: Observable<MediaItem[]>;
 
   searchControl = new FormControl('');
   optionsControl = new FormControl('');
@@ -84,7 +82,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(([query, options]) => {
         if (query?.trim()) {
-          this.images = this.getImagesPagination({
+          this.images$ = this.getImagesPagination({
             pageIndex: this.pageIndex,
             pageSize: this.pageSize,
           });
@@ -101,20 +99,23 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
   clearInput() {
     this.searchControl.reset();
+    this.optionsControl.reset();
     this.resetSearch();
   }
   onToggle(isToggle: boolean) {
     this.isImages = isToggle;
     this.mediaService.toggleMedia(isToggle);
   }
+
   handlePageEvent({ pageIndex, pageSize }: Pagination) {
-    this.images = this.getImagesPagination({ pageIndex, pageSize });
+    this.images$ = this.getImagesPagination({ pageIndex, pageSize });
   }
 
   private resetSearch() {
     this.searchService.resetTotalNumber();
-    this.images = new BehaviorSubject<MediaItem[]>([]).asObservable();
+    this.images$ = new BehaviorSubject<MediaItem[]>([]).asObservable();
   }
+
   private getImagesPagination({
     pageIndex,
     pageSize,

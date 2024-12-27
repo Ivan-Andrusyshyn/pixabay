@@ -1,21 +1,17 @@
-import { AsyncPipe } from '@angular/common';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Observable, of } from 'rxjs';
+import { MatMenuModule } from '@angular/material/menu';
+import { Router } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
 
 import { routeList, RouteList } from './route-list';
 import { AuthService } from '../services/auth.service';
 import { HeaderNavComponent } from '../../components/header-nav/header-nav.component';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [HeaderNavComponent],
+  imports: [HeaderNavComponent, MatButtonModule, MatMenuModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

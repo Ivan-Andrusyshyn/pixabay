@@ -1,3 +1,14 @@
 <header class="header">
-  <app-header-nav [routes]="routes" (logout)="logout()"></app-header-nav>
+  <div class="dsk-header">
+    <app-header-nav [routes]="routes" (logout)="logout()"></app-header-nav>
+  </div>
+
+  <div class="mobile-header">
+    <button mat-button [matMenuTriggerFor]="menu">Menu</button>
+    <mat-menu #menu="matMenu">
+      <app-header-nav [routes]="routes" (logout)="logout()"></app-header-nav>
+    </mat-menu>
+
+    <img src="../../../assets/favicon.png" alt="" />
+  </div>
 </header>

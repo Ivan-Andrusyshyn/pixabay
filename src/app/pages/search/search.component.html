@@ -21,8 +21,8 @@
       ></app-search-control>
     </div>
   </div>
-  <ng-container *ngIf="images | async as images">
-    <p *ngIf="images.length === 0">
+  <ng-container *ngIf="images$ | async as images">
+    <p class="subtitle" *ngIf="images.length === 0">
       No images found. Try a different search term.
     </p>
 

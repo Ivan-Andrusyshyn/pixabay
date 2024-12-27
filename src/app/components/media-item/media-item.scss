@@ -1,5 +1,5 @@
 .image-card {
-  width: 340px;
+  width: 280px;
   border-radius: 8px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -9,21 +9,25 @@
   flex-direction: column;
   background-color: #ffffff;
 
-  @media screen and (min-width: 932px) {
+  @media screen and (min-width: 768px) {
     width: 300px;
   }
 }
 .image-card__video {
-  width: 340px;
+  width: 280px;
   height: 200px;
   border-radius: 8px;
 
   object-fit: cover;
   background-color: #000;
+  @media screen and (min-width: 768px) {
+    width: 300px;
+  }
 }
 .video_wrapper {
   position: relative;
-  width: 340px;
+  width: 280px;
+
   height: 200px;
 
   span {
@@ -43,13 +47,16 @@
   span:hover {
     transform: scale(1.1);
   }
+  @media screen and (min-width: 768px) {
+    width: 300px;
+  }
 }
 .image-card:hover {
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .image-card__image {
-  width: 340px;
+  width: 280px;
   height: 200px;
 
   object-fit: cover;
@@ -60,7 +67,7 @@
     transform: scale(1.2) rotate(1deg);
   }
 
-  @media screen and (min-width: 932px) {
+  @media screen and (min-width: 768px) {
     width: 300px;
   }
 }

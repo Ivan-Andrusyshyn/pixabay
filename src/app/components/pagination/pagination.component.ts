@@ -22,7 +22,7 @@ export interface Pagination {
 })
 export class PaginationComponent {
   pageSize: number = 10;
-  pageIndex: number = 1;
+  pageIndex: number = 0;
   pageSizeOptions: number[] = [10, 20];
   hidePageSize = false;
   showPageSizeOptions = true;

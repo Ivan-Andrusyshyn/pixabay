@@ -1,5 +1,9 @@
 .home {
-  padding: 2rem 1rem;
+  padding: 1rem 0.5rem;
+
+  @media screen and (min-width: 768px) {
+    padding: 2rem 1rem;
+  }
 }
 .pagination-wrapper {
   padding: 1rem 0;

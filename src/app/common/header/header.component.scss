@@ -3,5 +3,23 @@ $background-color: #fafafa;
 .header {
   background-color: $background-color;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
-  padding: 10px 20px;
+  padding: 4px 8px;
+
+  @media screen and (min-width: 768px) {
+    padding: 10px 20px;
+  }
+
+  .mobile-header {
+    display: flex;
+    justify-content: space-between;
+    @media screen and (min-width: 768px) {
+      display: none;
+    }
+  }
+
+  .dsk-header {
+    @media screen and (max-width: 768px) {
+      display: none;
+    }
+  }
 }
