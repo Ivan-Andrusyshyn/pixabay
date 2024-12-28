@@ -21,30 +21,24 @@ export interface Pagination {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PaginationComponent {
-  pageSize: number = 10;
-  pageIndex: number = 0;
-  pageSizeOptions: number[] = [10, 20];
-  hidePageSize = false;
-  showPageSizeOptions = true;
-  showFirstLastButtons = true;
-  disabled = false;
-  pageEvent!: PageEvent;
-
-  @Output() onPageEvent = new EventEmitter<Pagination>();
+  @Input() pageSize: number = 10;
+  @Input() pageIndex: number = 0;
+  @Input() pageSizeOptions: number[] = [10, 20];
+  @Input() hidePageSize: boolean = false;
+  @Input() showPageSizeOptions: boolean = true;
+  @Input() showFirstLastButtons: boolean = true;
+  @Input() disabled: boolean = false;
   @Input() totalLength: number = 0;
 
+  @Output() onPageEvent = new EventEmitter<Pagination>();
+
   handlePageEvent(e: PageEvent) {
-    this.pageEvent = e;
     this.totalLength = e.length;
     this.pageSize = e.pageSize;
-    if (e.pageIndex) {
-      this.pageIndex = e.pageIndex;
-    } else {
-      this.pageIndex = 1;
-    }
+    this.pageIndex = e.pageIndex;
 
     this.onPageEvent.emit({
-      pageIndex: this.pageIndex,
+      pageIndex: this.pageIndex + 1,
       pageSize: this.pageSize,
     });
   }

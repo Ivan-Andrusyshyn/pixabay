@@ -21,12 +21,12 @@
       ></app-search-control>
     </div>
   </div>
-  <ng-container *ngIf="images$ | async as images">
-    <p class="subtitle" *ngIf="images.length === 0">
+  <ng-container *ngIf="media$ | async as media">
+    <p class="subtitle" *ngIf="media.length === 0">
       No images found. Try a different search term.
     </p>
 
-    <app-media-list [media]="images ?? []"></app-media-list>
+    <app-media-list [media]="media ?? []"></app-media-list>
   </ng-container>
   <div class="search-bg" *ngIf="(totalLength$ | async) === 0"></div>
 

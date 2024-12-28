@@ -74,8 +74,6 @@ export class HomeComponent implements OnInit {
   }
 
   handlePageEvent({ pageIndex, pageSize }: Pagination) {
-    console.log(pageIndex);
-
     this.pageIndex = pageIndex;
     this.pageSize = pageSize;
     this.media$ = this.getMediaPagination({ pageIndex, pageSize });

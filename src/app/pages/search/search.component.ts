@@ -59,14 +59,14 @@ export class SearchComponent implements OnInit, OnDestroy {
   private readonly destroyRef = inject(DestroyRef);
   private readonly authService = inject(AuthService);
 
-  images$!: Observable<MediaItem[]>;
+  media$!: Observable<MediaItem[]>;
 
-  searchControl = new FormControl('');
+  searchControl: FormControl<any> = new FormControl('');
   optionsControl: FormControl<any> = new FormControl('');
 
   isMultiSelector: boolean = true;
-  pageIndex = 1;
-  pageSize = 10;
+  pageIndex: number = 1;
+  pageSize: number = 10;
   options = [...Order, ...Category];
   totalLength$!: Observable<number>;
   isImages: boolean = true;
@@ -84,7 +84,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(([query, options]) => {
         if (query?.trim()) {
-          this.images$ = this.getImagesPagination({
+          this.media$ = this.getMediaPagination({
             pageIndex: this.pageIndex,
             pageSize: this.pageSize,
           });
@@ -121,15 +121,15 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   handlePageEvent({ pageIndex, pageSize }: Pagination) {
-    this.images$ = this.getImagesPagination({ pageIndex, pageSize });
+    this.media$ = this.getMediaPagination({ pageIndex, pageSize });
   }
 
   private resetSearch() {
     this.searchService.resetTotalNumber();
-    this.images$ = new BehaviorSubject<MediaItem[]>([]).asObservable();
+    this.media$ = new BehaviorSubject<MediaItem[]>([]).asObservable();
   }
 
-  private getImagesPagination({
+  private getMediaPagination({
     pageIndex,
     pageSize,
   }: Pagination): Observable<MediaItem[]> {
